@@ -1,2 +1,2 @@
-# kiite mobile application (in devlopment)
-#### kiite-mobile application (react-native)
+# kiite mobile application
+#### kiite-mobile application made from react-native (in devlopment)
