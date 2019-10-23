@@ -24,7 +24,7 @@ export default class AuthLoadingScreen extends React.Component {
       // screen will be unmounted and thrown away.
       setTimeout(() => {
         this.props.navigation.navigate(token ? 'App' : 'Auth');
-      }, 100);
+      }, 0);
       
     };
   
