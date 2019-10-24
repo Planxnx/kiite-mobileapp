@@ -1,9 +1,17 @@
 import React from 'react';
-import { AsyncStorage, StyleSheet, Text, View ,Button ,Image,TouchableHighlight ,TouchableOpacity  } from 'react-native';
+import { AsyncStorage, StyleSheet, Text, View ,Button ,Image,TouchableHighlight ,TouchableOpacity ,Alert } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 
 export default class LoginScreen extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            usernameInput: "",
+            passwordInput: "",
+            isLoading: false,
+        };
+    }
 
     static navigationOptions = {
         header: null,
@@ -13,12 +21,81 @@ export default class LoginScreen extends React.Component {
         this.props.navigation.navigate('Main')
     }
 
-    _signInAsync = async () => {
-        await AsyncStorage.setItem('userToken', 'abc');
-        this.props.navigation.navigate('App');
+    signIn = async () => {
+        this.setState({
+            isLoading: true
+        });
+        if(this.state.usernameInput == "" || this.state.passwordInput ==""){
+            Alert.alert(
+                '',
+                "Please fill up in this form",
+                [
+                  {text: 'OK'},
+                ],
+                {cancelable: false},
+            )
+            return
+        }
+
+        fetch('http://5db18f0de9751d0014ccf91a.mockapi.io/api/vtest/Login/', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                usernamee: this.state.usernameInput,
+                password: this.state.passwordInput,
+            }),
+        })
+        .then(response=>response.json())
+        .then(async (responseJson) => {
+            if(responseJson.status == 200){
+                this.setState({
+                    isLoading: false,
+                    respData: responseJson
+                });
+                await AsyncStorage.setItem('username', responseJson.data.username);
+                await AsyncStorage.setItem('role', responseJson.data.role);
+                await AsyncStorage.setItem('token', responseJson.data.token);
+                this.props.navigation.navigate('App');
+            }else if(responseJson.status == 401){
+                this.setState({
+                    isLoading: false,
+                });
+                Alert.alert(
+                    'Login failed',
+                    "Your username or/and password don't match",
+                    [
+                      {text: 'OK'},
+                    ],
+                    {cancelable: false},
+                )
+                return
+            }
+            else {
+                this.setState({
+                    isLoading: false,
+                });
+                Alert.alert(
+                    'Login failed',
+                    "Something went wrong. Please try again",
+                    [
+                      {text: 'OK'},
+                    ],
+                    {cancelable: false},
+                )
+                return
+            }
+        }).catch(error=>{
+            console.error(error) 
+            return
+        })   
     }
 
     render(){
+        const { isLoading,warnMessage } = this.state;
+
         return (
         <View style={styles.container}>
              <View >
@@ -30,6 +107,7 @@ export default class LoginScreen extends React.Component {
                  </Text>
              </View>
              <View style={styles.loginForm} > 
+             { isLoading ? <Text>LOADING </Text> : <Text>{JSON.stringify(warnMessage)}</Text> }
                 <View style={styles.textInputBox}>
                     <Image
                         style={styles.imgInput}
@@ -40,6 +118,10 @@ export default class LoginScreen extends React.Component {
                         placeholder="Username"
                         autoCompleteType="username"
                         autoCapitalize = "none"
+                        onChangeText={usernameInput => {
+                            this.setState({ usernameInput });
+                        }}
+                        value={this.state.usernameInput}
                     />
                 </View>
                 <View style={styles.textInputBox}>
@@ -52,6 +134,10 @@ export default class LoginScreen extends React.Component {
                         placeholder="Password"
                         autoCompleteType="password"
                         secureTextEntry = {true}
+                        onChangeText={passwordInput => {
+                            this.setState({ passwordInput });
+                        }}
+                        value={this.state.passwordInput}
                     />
                 </View>
                 <TouchableOpacity style={{marginStart: vh(29.5352),}}>
@@ -60,7 +146,7 @@ export default class LoginScreen extends React.Component {
                         </Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
-                    onPress={this._signInAsync}
+                    onPress={this.signIn}
                 >
                     <View style={styles.buttontext} >
                         <Text style={{textAlignVertical:'center',fontSize:vh(1.799)}}>Login</Text>
@@ -72,19 +158,23 @@ export default class LoginScreen extends React.Component {
                     Don't Have an account ? &nbsp;
                 </Text>
                 <TouchableOpacity>
-                        <Text style={styles.createText}>
+                    <Text style={styles.createText}>
                             Create
-                        </Text>
+                    </Text>
                 </TouchableOpacity>
              </View>
              <View style={styles.footer} >
-                 <Text style={styles.createText}>
-                     Privacy & Policy
-                 </Text>
-                 <Text>&nbsp;|&nbsp;</Text>
-                 <Text style={styles.createText} >
-                     About us
-                 </Text>
+                <TouchableOpacity>
+                    <Text style={styles.createText}>
+                            Privacy&Policy
+                    </Text>
+                </TouchableOpacity>
+                <Text>&nbsp;|&nbsp;</Text>
+                <TouchableOpacity>
+                    <Text style={styles.createText}>
+                            About us
+                    </Text>
+                </TouchableOpacity>
              </View>
         </View>
         )
