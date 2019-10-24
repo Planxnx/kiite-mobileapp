@@ -1,5 +1,5 @@
 import React from 'react';
-import { AsyncStorage, StyleSheet, Text, View ,Button ,Image,TouchableHighlight ,TouchableOpacity ,Alert } from 'react-native';
+import { ActivityIndicator,AsyncStorage, StyleSheet, Text, View ,Button ,Image,TouchableHighlight ,TouchableOpacity ,Alert } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 
@@ -14,7 +14,7 @@ export default class LoginScreen extends React.Component {
     }
 
     static navigationOptions = {
-        header: null,
+        headerTransparent: true
     };
 
     gotoMain = () => {
@@ -26,6 +26,9 @@ export default class LoginScreen extends React.Component {
             isLoading: true
         });
         if(this.state.usernameInput == "" || this.state.passwordInput ==""){
+            this.setState({
+                isLoading: false
+            });
             Alert.alert(
                 '',
                 "Please fill up in this form",
@@ -107,7 +110,6 @@ export default class LoginScreen extends React.Component {
                  </Text>
              </View>
              <View style={styles.loginForm} > 
-             { isLoading ? <Text>LOADING </Text> : <Text>{JSON.stringify(warnMessage)}</Text> }
                 <View style={styles.textInputBox}>
                     <Image
                         style={styles.imgInput}
@@ -145,20 +147,22 @@ export default class LoginScreen extends React.Component {
                             Forgot your password
                         </Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
-                    onPress={this.signIn}
-                >
-                    <View style={styles.buttontext} >
-                        <Text style={{textAlignVertical:'center',fontSize:vh(1.799)}}>Login</Text>
-                    </View>
-                </TouchableOpacity>
+                
+                { isLoading ? <TouchableOpacity disabled={true}><View style={styles.buttontext}><ActivityIndicator/></View></TouchableOpacity> : 
+                    <TouchableOpacity onPress={this.signIn}><View style={styles.buttontext} ><Text style={{textAlignVertical:'center',fontSize:vh(1.799)}}>Login</Text></View></TouchableOpacity>
+                }
              </View>
              <View style={styles.createAccount} >
                 <Text style={styles.text}>
                     Don't Have an account ? &nbsp;
                 </Text>
                 <TouchableOpacity>
-                    <Text style={styles.createText}>
+                    <Text 
+                        style={styles.createText}
+                        onPress={()=>{
+                            this.props.navigation.navigate('Create')
+                        }}
+                    >
                             Create
                     </Text>
                 </TouchableOpacity>
