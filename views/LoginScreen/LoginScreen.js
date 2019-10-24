@@ -31,7 +31,7 @@ export default class LoginScreen extends React.Component {
             });
             Alert.alert(
                 '',
-                "Please fill up in this form",
+                "Please fill in all fields",
                 [
                   {text: 'OK'},
                 ],
@@ -40,7 +40,7 @@ export default class LoginScreen extends React.Component {
             return
         }
 
-        fetch('http://5db18f0de9751d0014ccf91a.mockapi.io/api/vtest/Login/', {
+        fetch('http://5db18f0de9751d0014ccf91a.mockapi.io/api/vtest/login401/', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -68,7 +68,7 @@ export default class LoginScreen extends React.Component {
                 });
                 Alert.alert(
                     'Login failed',
-                    "Your username or/and password don't match",
+                    "Wrong username or password",
                     [
                       {text: 'OK'},
                     ],
@@ -101,6 +101,7 @@ export default class LoginScreen extends React.Component {
 
         return (
         <View style={styles.container}>
+            <View style={styles.circle} />
              <View >
                  <Text style={styles.kiiteHeader}>
                     Kiite
@@ -191,6 +192,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#2FC4B2',
         alignItems: 'center',
         flexDirection: 'column',
+    },
+    circle: {
+        width: vh(18.29),
+        height: vh(18.29),
+        borderRadius: vh(18.29/2),
+        backgroundColor: '#f8f8f8',
+        position: 'absolute',
+        right: vw(53.3333),
+        top: vh(7.94602),
     },
     text:{
         fontSize: vh(1.799),
