@@ -8,7 +8,9 @@ import {
 } from 'react-native';
 import { vh, vw } from 'react-native-expo-viewport-units';
 
+
 export default class TimelineStatus extends Component  {
+    
     render() {
       return (
         <View style={styles.container}>

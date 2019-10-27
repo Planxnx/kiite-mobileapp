@@ -1,7 +1,9 @@
 import React from 'react';
-import { AsyncStorage,StyleSheet, Button, View ,ScrollView  ,TouchableOpacity,Image } from 'react-native';
+import { AsyncStorage,StyleSheet,Text, Button, View ,ScrollView  ,TouchableOpacity,Image } from 'react-native';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import TimelineStatus from  './components/timelineStatus'
+import OverallStatus from  './components/overallStatus'
+
 export default class MainScreen extends React.Component {
     constructor() {
         super();
@@ -9,49 +11,30 @@ export default class MainScreen extends React.Component {
             username: "token",
             passwordInput: "",
             isLoading: false,
-            exmapleText:[
-                {
-                    status:200,
-                    data:{
-                        text:"justo donec enim diam vulputate ut pharetra sit amet aliquam id diam maecenas ultricies mi eget mauris pharetra et ultrices neque ornare aenean euismod elementum nisi quis eleifend quam adipiscing vitae proin sagittis nisl rhoncus mattis rhoncus urna neque viverra"
-                    }
-                },{
-                    status:200,
-                    data:{
-                        text:"dui ut ornare lectus sit amet est placerat in egestas erat imperdiet sed euismod nisi porta lorem mollis aliquam ut"
-                    }
-                },{
-                    status:200,
-                    data:{
-                        text:"lacinia quis vel eros donec ac odio tempor orci dapibus ultrices in iaculis nunc sed augue lacus viverra vitae congue eu consequat ac felis donec et odio pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur vitae nunc sed velit dignissim sodales ut eu sem integer vitae justo eget magna fermentum iaculis eu non diam phasellus vestibulum lorem sed risus ultricies tristique nulla aliquet enim tortor at auctor urna nunc id cursus metus aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci a scelerisque purus semper eget duis at tellus at urna condimentum mattis pellentesque id nibh tortor id aliquet lectus proin nibh nisl condimentum id venenatis a condimentum vitae sapien pellentesque habitant morbi tristique senectus et netus et malesuada fames ac"
-                    }
-                },{
-                    status:200,
-                    data:{
-                        text:"vitae elementum curabitur vitae nunc sed velit dignissim sodales ut eu sem integer vitae justo eget magna fermentum iaculis eu non diam phasellus vestibulum lorem sed risus ultricies tristique nulla aliquet enim tortor at auctor urna nunc id cursus metus aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci a scelerisque purus semper eget duis at tellus at urna condimentum mattis pellentesque id nibh tortor id aliquet lectus proin nibh nisl condimentum id venenatis a condimentum vitae sapien pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas sed tempus urna et pharetra pharetra massa"
-                    }
-                },{
-                    status:200,
-                    data:{
-                        text:"aliquet eget sit amet tellus cras adipiscing enim eu turpis"
-                    }
-                },{
-                    status:200,
-                    data:{
-                        text:"ut faucibus pulvinar elementum integer enim neque volutpat ac tincidunt vitae semper quis lectus nulla at volutpat diam ut venenatis tellus in metus vulputate eu scelerisque felis imperdiet proin fermentum leo vel orci porta non pulvinar neque laoreet suspendisse interdum consectetur libero id faucibus nisl tincidunt eget nullam non nisi est sit amet facilisis magna etiam tempor orci eu lobortis elementum nibh tellus molestie nunc non blandit massa enim nec dui nunc mattis enim ut tellus elementum sagittis vitae et"
-                    }
-                },{
-                    status:200,
-                    data:{
-                        text:"dolor purus non enim praesent elementum facilisis leo vel fringilla est ullamcorper eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum"
-                    }
-                },{
-                    status:200,
-                    data:{
-                        text:"proin sed libero enim sed faucibus turpis in eu mi bibendum neque egestas congue quisque egestas diam in arcu cursus euismod quis viverra nibh cras pulvinar mattis nunc sed blandit libero volutpat sed cras ornare arcu dui vivamus arcu felis bibendum ut tristique et egestas quis ipsum suspendisse ultrices gravida dictum fusce ut placerat orci nulla pellentesque dignissim enim sit amet venenatis urna cursus eget nunc scelerisque viverra mauris in aliquam sem fringilla ut morbi tincidunt augue interdum velit euismod in pellentesque massa placerat duis ultricies lacus sed turpis tincidunt id aliquet risus feugiat in"
-                    }
-                },
-            ]
+            exmapleResp: {
+                status:200,
+                data:[
+                    {
+                        text: "pretium cursus mattis molestie a iaculis at erat pellentesque adipiscing commodo elit at imperdiet dui accumsan sit amet nulla facilisi morbi tempus iaculis urna id volutpat lacus laoreet non curabitur gravida arcu ac tortor dignissim convallis aenean et tortor at",
+                        mood: "pos"
+                    },{
+                        text: "tempor orci dapibus ultrices in iaculis nunc sed augue lacus viverra vitae congue eu consequat ac felis donec et odio pellentesque diam volutpat commodo",
+                        mood: "neg"
+                    },{
+                        text: "viverra ipsum nunc aliquet bibendum enim facilisis gravida neque convallis a cras semper auctor neque vitae tempus quam pellentesque nec nam aliquam sem et tortor consequat id porta nibh venenatis cras sed felis eget velit aliquet sagittis id consectetur purus ut faucibus pulvinar elementum integer enim neque volutpat ac tincidunt vitae semper quis lectus nulla at volutpat diam ut venenatis tellus in metus vulputate eu scelerisque felis imperdiet proin fermentum leo vel orci porta non pulvinar neque laoreet suspendisse",
+                        mood: "neg"
+                    },{
+                        text: "adipiscing commodo elit at imperdiet dui accumsan sit amet nulla facilisi",
+                        mood: "neg"
+                    },{
+                        text: "felis donec et odio pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur vitae nunc sed velit dignissim sodales ut eu sem integer vitae justo eget magna fermentum iaculis eu non diam phasellus vestibulum lorem sed risus ultricies tristique nulla aliquet enim tortor at auctor urna nunc id cursus metus aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci a scelerisque purus semper eget duis at tellus at urna condimentum mattis pellentesque id nibh tortor id aliquet lectus proin nibh nisl condimentum id venenatis a condimentum vitae sapien pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas sed tempus urna et pharetra pharetra massa massa ultricies mi quis hendrerit dolor magna eget est lorem ipsum dolor sit amet",
+                        mood: "pos"
+                    },{
+                        text: "non enim praesent eget nulla facilisi etiam dignissim diam quis enim lobortis sagittis eu volutpat odio facilisis mauris sit amet massa vitae tortor condimentum lacinia quis vel eros donec ac odio tempor orci dapibus ultrices in iaculis nunc sed augue lacus viverra vitae congue eu consequat ac felis donec et odio pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur vitae nunc sed velit dignissim sodales ut",
+                        mood: "neg"
+                    },
+                ]     
+            }
         }
     }
 
@@ -87,6 +70,8 @@ export default class MainScreen extends React.Component {
             role:data[2][1]
           });
         });
+
+        this._findMoodCount()
     }
 
     _signOutAsync = async () => {
@@ -94,16 +79,44 @@ export default class MainScreen extends React.Component {
         this.props.navigation.navigate('AuthLoading');
     };
 
+    _settingApp = () => {
+        this.props.navigation.navigate('Setting');
+    };
+
+    _findMoodCount = () => {
+        let posCount = 0
+        let negCount = 0
+        for (let i = 0; i < this.state.exmapleResp.data.length; i++){
+            if (this.state.exmapleResp.data[i].mood == "pos"){
+                posCount +=1
+            }else{
+                negCount +=1
+            }
+        }
+        posCount = posCount/(posCount+negCount)
+        this.setState({
+            mooddPercentage:{
+                pos:posCount,
+                neg:1-posCount
+            },
+        });
+    }
+
     render(){
-        const TimelinseStatuses =  this.state.exmapleText.map((data,key)=>{
-            return <TimelineStatus key = {key} text={data.data.text} />
+        const { posCount,negCount } = this.state;
+
+        const TimelinseStatuses =  this.state.exmapleResp.data.map((data,key)=>{
+            return <TimelineStatus key = {key} text={data.text} />
         })
+
         return (
             <View style={styles.container}>
+                <OverallStatus posCount={parseFloat(posCount)} negCount={this.state.negCount} />
                 <ScrollView style={{flex: 1}} >
                     {TimelinseStatuses}
                 </ScrollView>
                 <View >
+                    <Text>{this.state.posCount}</Text>
                     <Button title="sign out" onPress={this._signOutAsync} />
                 </View>
             </View>
@@ -111,9 +124,7 @@ export default class MainScreen extends React.Component {
         );
     }
 
-    _settingApp = () => {
-        this.props.navigation.navigate('Setting');
-    };
+    
     
 }
 
