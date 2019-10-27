@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
 import {
+    AsyncStorage,
   Dimensions ,
   Text,
   Image,
@@ -15,16 +16,20 @@ export default class OverallStatus extends Component  {
             posPercent:0.5,
             negPercent:0.5
         }
+        this._bootstrapAsync()
     }
-    componentDidMount() {
+    _bootstrapAsync = async() =>{
+        const posCount = await AsyncStorage.getItem('posCount');
         let {width, height} = Dimensions.get('window')
-        const posPercentW = (height*50.97/100) * 0.33 //instead 0.33 with pos percent
+        const posPercentW = (height*50.97/100) * parseInt(posCount)/100 
         const negPercentW =  (height*50.97/100) - posPercentW
         this.setState({
             posPercentW:posPercentW,
             negPercentW:negPercentW,
             height: height
           });
+          await AsyncStorage.removeItem('posCount');
+
     }
     render() {
         const { posPercentW,negPercentW,height } = this.state;
@@ -33,18 +38,18 @@ export default class OverallStatus extends Component  {
             <View style={styles.container}>
                 <View style={{width:vh(50.97),alignItems:'flex-start'}}>
                     <Text style={{color:"#f8f8f8f8",fontSize: vh(1.799)}}>
-                        currently mood 
+                        currently mood {posPercentW/(height*50.97/100)*100}%
                     </Text>
                 </View>
                 <View style={{flexDirection: 'row',}}>
                     <View style={{height:vh(2.24887),width:posPercentW, backgroundColor:'#2FC4B2',paddingLeft:vh(0.7496) }} >
                         <Text style={{color:"#f8f8f8f8",alignSelf:'flex-start',fontSize: vh(1.799)}}>
-                            positive {posPercentW}
+                            positive
                         </Text>
                     </View>
                     <View style={{height:vh(2.24887),width:negPercentW, backgroundColor:'#C4C4C4',paddingRight:vh(0.7496), }} >
                         <Text style={{color:"#f8f8f8f8",alignSelf:'flex-end',fontSize: vh(1.799)}}>
-                            negative {negPercentW}
+                            negative 
                         </Text>
                     </View>
                 </View>

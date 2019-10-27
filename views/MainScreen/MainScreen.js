@@ -32,10 +32,26 @@ export default class MainScreen extends React.Component {
                     },{
                         text: "non enim praesent eget nulla facilisi etiam dignissim diam quis enim lobortis sagittis eu volutpat odio facilisis mauris sit amet massa vitae tortor condimentum lacinia quis vel eros donec ac odio tempor orci dapibus ultrices in iaculis nunc sed augue lacus viverra vitae congue eu consequat ac felis donec et odio pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur vitae nunc sed velit dignissim sodales ut",
                         mood: "neg"
-                    },
+                    },{
+                        text: "non enim praesent eget nulla facilisi etiam dignissim diam quis enim lobortis sagittis eu volutpat odio facilisis mauris sit amet massa vitae tortor condimentum lacinia quis vel eros donec ac odio tempor orci dapibus ultrices in iaculis nunc sed augue lacus viverra vitae congue eu consequat ac felis donec et odio pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur vitae nunc sed velit dignissim sodales ut",
+                        mood: "neg"
+                    },{
+                        text: "felis donec et odio pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur vitae nunc sed velit dignissim sodales ut eu sem integer vitae justo eget magna fermentum iaculis eu non diam phasellus vestibulum lorem sed risus ultricies tristique nulla aliquet enim tortor at auctor urna nunc id cursus metus aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci a scelerisque purus semper eget duis at tellus at urna condimentum mattis pellentesque id nibh tortor id aliquet lectus proin nibh nisl condimentum id venenatis a condimentum vitae sapien pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas sed tempus urna et pharetra pharetra massa massa ultricies mi quis hendrerit dolor magna eget est lorem ipsum dolor sit amet",
+                        mood: "pos"
+                    },{
+                        text: "felis donec et odio pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur vitae nunc sed velit dignissim sodales ut eu sem integer vitae justo eget magna fermentum iaculis eu non diam phasellus vestibulum lorem sed risus ultricies tristique nulla aliquet enim tortor at auctor urna nunc id cursus metus aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci a scelerisque purus semper eget duis at tellus at urna condimentum mattis pellentesque id nibh tortor id aliquet lectus proin nibh nisl condimentum id venenatis a condimentum vitae sapien pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas sed tempus urna et pharetra pharetra massa massa ultricies mi quis hendrerit dolor magna eget est lorem ipsum dolor sit amet",
+                        mood: "pos"
+                    },{
+                        text: "felis donec et odio pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur vitae nunc sed velit dignissim sodales ut eu sem integer vitae justo eget magna fermentum iaculis eu non diam phasellus vestibulum lorem sed risus ultricies tristique nulla aliquet enim tortor at auctor urna nunc id cursus metus aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci a scelerisque purus semper eget duis at tellus at urna condimentum mattis pellentesque id nibh tortor id aliquet lectus proin nibh nisl condimentum id venenatis a condimentum vitae sapien pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas sed tempus urna et pharetra pharetra massa massa ultricies mi quis hendrerit dolor magna eget est lorem ipsum dolor sit amet",
+                        mood: "neg"
+                    },{
+                        text: "felis donec et odio pellentesque diam volutpat commodo sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium vulputate sapien nec sagittis aliquam malesuada bibendum arcu vitae elementum curabitur vitae nunc sed velit dignissim sodales ut eu sem integer vitae justo eget magna fermentum iaculis eu non diam phasellus vestibulum lorem sed risus ultricies tristique nulla aliquet enim tortor at auctor urna nunc id cursus metus aliquam eleifend mi in nulla posuere sollicitudin aliquam ultrices sagittis orci a scelerisque purus semper eget duis at tellus at urna condimentum mattis pellentesque id nibh tortor id aliquet lectus proin nibh nisl condimentum id venenatis a condimentum vitae sapien pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas sed tempus urna et pharetra pharetra massa massa ultricies mi quis hendrerit dolor magna eget est lorem ipsum dolor sit amet",
+                        mood: "neg"
+                    }
                 ]     
             }
         }
+        this._findMoodCount()
     }
 
     static navigationOptions = {
@@ -70,8 +86,6 @@ export default class MainScreen extends React.Component {
             role:data[2][1]
           });
         });
-
-        this._findMoodCount()
     }
 
     _signOutAsync = async () => {
@@ -83,7 +97,7 @@ export default class MainScreen extends React.Component {
         this.props.navigation.navigate('Setting');
     };
 
-    _findMoodCount = () => {
+    _findMoodCount = async () => {
         let posCount = 0
         let negCount = 0
         for (let i = 0; i < this.state.exmapleResp.data.length; i++){
@@ -93,17 +107,11 @@ export default class MainScreen extends React.Component {
                 negCount +=1
             }
         }
-        posCount = posCount/(posCount+negCount)
-        this.setState({
-            mooddPercentage:{
-                pos:posCount,
-                neg:1-posCount
-            },
-        });
+        posCount = posCount/(posCount+negCount)*100
+        await AsyncStorage.setItem('posCount', posCount.toString());
     }
 
     render(){
-        const { posCount,negCount } = this.state;
 
         const TimelinseStatuses =  this.state.exmapleResp.data.map((data,key)=>{
             return <TimelineStatus key = {key} text={data.text} />
@@ -111,7 +119,7 @@ export default class MainScreen extends React.Component {
 
         return (
             <View style={styles.container}>
-                <OverallStatus posCount={parseFloat(posCount)} negCount={this.state.negCount} />
+                <OverallStatus/>
                 <ScrollView style={{flex: 1}} >
                     {TimelinseStatuses}
                 </ScrollView>
