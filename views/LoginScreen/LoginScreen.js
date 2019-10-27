@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     },
     text:{
         fontSize: vh(1.799),
-        textAlign: "center"
+        textAlign: "center",
     },
     kiiteHeader:{
         fontSize: vh(11.99),
