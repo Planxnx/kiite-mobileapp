@@ -16,6 +16,9 @@ export default class OverallStatus extends Component  {
             posPercent:0.5,
             negPercent:0.5
         }
+    }
+
+    componentDidMount() {
         this._bootstrapAsync()
     }
     _bootstrapAsync = async() =>{
@@ -28,7 +31,7 @@ export default class OverallStatus extends Component  {
             negPercentW:negPercentW,
             height: height
           });
-          await AsyncStorage.removeItem('posCount');
+        await AsyncStorage.removeItem('posCount');
 
     }
     render() {

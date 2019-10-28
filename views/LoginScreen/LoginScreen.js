@@ -91,7 +91,18 @@ export default class LoginScreen extends React.Component {
                 return
             }
         }).catch(error=>{
-            console.error(error) 
+            console.error(error)
+            this.setState({
+                isLoading: false,
+            });
+            Alert.alert(
+                'Create Status failed',
+                "Something went wrong. Please try again",
+                [
+                  {text: 'OK'},
+                ],
+                {cancelable: false},
+            ) 
             return
         })   
     }
