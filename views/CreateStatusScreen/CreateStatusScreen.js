@@ -1,5 +1,5 @@
 import React from 'react';
-import { AsyncStorage,StyleSheet, Text, View ,ScrollView  ,TouchableOpacity,Image } from 'react-native';
+import { ActivityIndicator,AsyncStorage,StyleSheet, Text, View ,Alert  ,TouchableOpacity,Image } from 'react-native';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import { TextInput } from 'react-native-gesture-handler';
 
@@ -7,7 +7,7 @@ export default class CreateStatusScreen extends React.Component {
     constructor() {
         super();
         this.state = {
-            username: "token",
+            username: "",
             statusInput: "",
             isLoading: false,
         }
@@ -28,7 +28,58 @@ export default class CreateStatusScreen extends React.Component {
     }
 
     postStatus = () => {
-        this.props.navigation.navigate('Timeline');
+        this.setState({
+            isLoading: true
+        });
+
+        fetch('http://5db18f0de9751d0014ccf91a.mockapi.io/api/vtest/get/', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                text: this.state.statusInput,
+                username: this.state.username,
+            }),
+        })
+        .then(response=>response.json())
+        .then(async (responseJson) => {
+            if(responseJson.status == 200){
+                this.setState({
+                    isLoading: false,
+                    respData: responseJson
+                });
+                this.props.navigation.navigate('Timeline');
+            }else {
+                this.setState({
+                    isLoading: false,
+                });
+                Alert.alert(
+                    'Create Status failed',
+                    "Something went wrong. Please try again",
+                    [
+                      {text: 'OK'},
+                    ],
+                    {cancelable: false},
+                )
+                return
+            }
+        }).catch(error=>{
+            this.setState({
+                isLoading: false,
+            });
+            Alert.alert(
+                'Create Status failed',
+                "Something went wrong. Please try again",
+                [
+                  {text: 'OK'},
+                ],
+                {cancelable: false},
+            )
+            console.error(error) 
+            return
+        })  
     };
 
     _findMoodCount = async () => {
@@ -69,12 +120,11 @@ export default class CreateStatusScreen extends React.Component {
                 </View>
                 <View style={styles.buttonInputBox}>
                     <TouchableOpacity 
+                        disabled={this.state.statusInput.trim().length>0 && !this.state.isLoading ? false : true}
                         onPress={this.postStatus}
                     >
                         <View style={styles.buttontext} >
-                            <Text style={{color:'#f8f8f8',textAlignVertical:'center',fontSize:vh(1.799)}}>
-                                Post
-                            </Text>
+                                {this.state.isLoading ? <ActivityIndicator/> : <Text style={{color:'#f8f8f8',textAlignVertical:'center',fontSize:vh(1.799)}}>Post</Text>}
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -96,8 +146,10 @@ const styles = StyleSheet.create({
     textInputBox:{
         backgroundColor: '#F8F8F8',
         padding:vh(2.248875),
+        minHeight:vw(26.666),
         maxHeight:vh(40),
         width:vh(47.676),
+        // width:vw(84),
         marginVertical: vh(1.199),
         borderRadius: vh(0.899),
         flexDirection: 'row',
