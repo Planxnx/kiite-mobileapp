@@ -225,7 +225,7 @@ export default class CreateScreen extends React.Component {
                         placeholder="Username"
                         autoCompleteType="username"
                         autoCapitalize = "none"
-                        maxLength = "30"
+                        maxLength = {30}
                         onChangeText={usernameInput => {
                             this.setState({ usernameInput });
                         }}
@@ -259,7 +259,7 @@ export default class CreateScreen extends React.Component {
                         placeholder="Password"
                         autoCompleteType="password"
                         autoCapitalize = "none"
-                        maxLength = "24"
+                        maxLength = {24}
                         secureTextEntry = {true}
                         onChangeText={passwordInput => {
                             this.setState({ passwordInput });
@@ -277,7 +277,7 @@ export default class CreateScreen extends React.Component {
                         placeholder="Confirm Password"
                         autoCompleteType="password"
                         autoCapitalize = "none"
-                        maxLength = "24"
+                        maxLength = {24}
                         secureTextEntry = {true}
                         onChangeText={repasswordInput => {
                             this.setState({ repasswordInput });
