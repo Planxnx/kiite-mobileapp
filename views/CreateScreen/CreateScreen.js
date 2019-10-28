@@ -138,7 +138,7 @@ export default class CreateScreen extends React.Component {
             return
         }
 
-        fetch('http://5db18f0de9751d0014ccf91a.mockapi.io/api/vtest/Login/', {
+        fetch('http://5db18f0de9751d0014ccf91a.mockapi.io/api/vtest/status200/', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
