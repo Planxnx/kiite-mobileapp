@@ -5,8 +5,8 @@ import TimelineStatus from  './components/timelineStatus'
 import OverallStatus from  './components/overallStatus'
 
 export default class TimelineScreen extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             username: "token",
             passwordInput: "",
@@ -48,29 +48,21 @@ export default class TimelineScreen extends React.Component {
         this._findMoodCount()
     }
 
-    static navigationOptions = {
+    static navigationOptions = ({ navigation }) => ({
         title: 'Kiite’s Timeline',
-        headerTintColor: '#F8F8F8',
-        headerStyle: {
-            backgroundColor: '#2FC4B2' ,
-            borderBottomWidth: 0,
-            elevation: 0,
-            shadowOpacity: 0,
-        },
-        headerTitleStyle: {
-            fontWeight: 'bold', 
-        },
-        headerRight: () => (
+        headerRight: (
             <TouchableOpacity
-              onPress={() => {}}
+                navigation={navigation}
+
+                onPress={()=>{navigation.navigate('CreateStatus')}}
             >   
                 <Image
                     style={styles.imgInput}
                     source={require('./assets/createStatus.png')}
                 />
             </TouchableOpacity>
-        ),
-    }
+        )
+    })
 
     componentDidMount() {
         AsyncStorage.multiGet(['username','token','role']).then((data) => {
