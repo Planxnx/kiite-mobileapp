@@ -40,18 +40,20 @@ export default class TimelineScreen extends React.Component {
             token:data[1][1],
             role:data[2][1]
           });
+          this._fetchStatus(data[1][1])
         });
-        this._fetchStatus()
+
     }
 
-    _fetchStatus = () =>{
+    _fetchStatus = (token) =>{
         this.setState({
             isLoading: true
         });
-        fetch('http://5db18f0de9751d0014ccf91a.mockapi.io/api/vtest/timeline/', {
+        fetch('https://cloudarch-ite.appspot.com/timeline', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
+                'Authorization': 'Bearer '+token,
                 'Content-Type': 'application/json',
             }
         })

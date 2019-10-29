@@ -40,14 +40,14 @@ export default class LoginScreen extends React.Component {
             return
         }
 
-        fetch('http://5db18f0de9751d0014ccf91a.mockapi.io/api/vtest/Login/', {
+        fetch('https://cloudarch-ite.appspot.com/auth/login', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                usernamee: this.state.usernameInput,
+                username: this.state.usernameInput,
                 password: this.state.passwordInput,
             }),
         })

@@ -32,10 +32,11 @@ export default class CreateStatusScreen extends React.Component {
             isLoading: true
         });
 
-        fetch('http://5db18f0de9751d0014ccf91a.mockapi.io/api/vtest/get/', {
+        fetch('https://cloudarch-ite.appspot.com/timeline', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
+                'Authorization': 'Bearer '+ this.state.token,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
