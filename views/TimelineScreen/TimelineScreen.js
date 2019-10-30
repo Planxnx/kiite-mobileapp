@@ -49,7 +49,8 @@ export default class TimelineScreen extends React.Component {
         this.setState({
             isLoading: true
         });
-        fetch('https://cloudarch-ite.appspot.com/timeline', {
+        fetch('http://5db18f0de9751d0014ccf91a.mockapi.io/api/vtest/timeline', {
+        // fetch('https://cloudarch-ite.appspot.com/timeline', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -133,7 +134,7 @@ export default class TimelineScreen extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5fcff',
+        backgroundColor: '#EDEDED',
         alignItems: 'center',
         justifyContent: 'center',
     },

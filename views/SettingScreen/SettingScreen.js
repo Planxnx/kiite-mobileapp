@@ -29,7 +29,7 @@ export default class SettingScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5fcff',
+    backgroundColor: '#EDEDED',
     alignItems: 'center',
     justifyContent: 'center',
   },

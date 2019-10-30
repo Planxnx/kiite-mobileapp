@@ -27,8 +27,10 @@ export default class OverallStatus extends Component  {
         const posPercentW = (height*50.97/100) * parseInt(posCount)/100 
         const negPercentW =  (height*50.97/100) - posPercentW
         this.setState({
-            posPercentW:posPercentW,
-            negPercentW:negPercentW,
+            posPercentW:150,
+            negPercentW:150,
+            // posPercentW:posPercentW,
+            // negPercentW:negPercentW,
             height: height
           });
         await AsyncStorage.removeItem('posCount');

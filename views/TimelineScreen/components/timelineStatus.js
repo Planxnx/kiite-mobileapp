@@ -18,7 +18,7 @@ export default class TimelineStatus extends Component  {
                 <Image
                         style={styles.imgStatus}
                         source={require('../assets/user.png')}
-                    />
+                />
                 <Text style={styles.text}>{this.props.text}</Text>
             </View>
             <View style={styles.bottomLine} />
@@ -29,7 +29,6 @@ export default class TimelineStatus extends Component  {
 const styles = StyleSheet.create({
     container: {
         marginTop:vh(2.998),
-        backgroundColor: '#f5fcff',
         width: vw(100)
     },
     text:{
