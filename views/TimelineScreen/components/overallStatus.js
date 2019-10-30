@@ -41,7 +41,7 @@ export default class OverallStatus extends Component  {
             <View style={styles.container}>
                 <View style={{width:vh(50.97),alignItems:'flex-start'}}>
                     <Text style={{color:"#f8f8f8f8",fontSize: vh(1.799)}}>
-                        currently mood {posPercentW/(height*50.97/100)*100}%
+                        currently mood
                     </Text>
                 </View>
                 <View style={{flexDirection: 'row',}}>

@@ -84,12 +84,24 @@ export default class TimelineScreen extends React.Component {
         for (let i = 0; i < this.state.respData.data.length; i++){
             if (this.state.respData.data[i].mood == "pos"){
                 posCount +=1
-            }else{
+            }else if (this.state.respData.data[i].mood == "neg"){
                 negCount +=1
             }
         }
-        posCount = posCount/(posCount+negCount)*100
-        await AsyncStorage.setItem('posCount', posCount.toString());
+        if (posCount == 0 && negCount == 0){
+            posCount = 50
+            await AsyncStorage.setItem('posCount', posCount.toString())
+        }else if (posCount == 0 && negCount > 0){
+            posCount = 2
+            await AsyncStorage.setItem('posCount', posCount.toString())
+        }else if (posCount > 0 && negCount == 0){
+            posCount = 98
+            await AsyncStorage.setItem('posCount', posCount.toString())
+        } else {
+            posCount = posCount/(posCount+negCount)*100
+            await AsyncStorage.setItem('posCount', posCount.toString())
+        }
+        
     }
 
     render(){
