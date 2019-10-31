@@ -13,19 +13,19 @@ export default class SettingScreen extends React.Component {
     }
 
     render(){
+        const { navigation } = this.props
         return (
             <View style={styles.container}>
                 <Text>
                     Chat
                 </Text>
+                <Text>
+                    User Data:
+                    {JSON.stringify(navigation.getParam('userData', 'null'))}
+                </Text>
             </View>
         );
     }
-    
-    _signOutAsync = async () => {
-        await AsyncStorage.clear();
-        this.props.navigation.navigate('AuthLoading');
-    };
 }
 
 const styles = StyleSheet.create({

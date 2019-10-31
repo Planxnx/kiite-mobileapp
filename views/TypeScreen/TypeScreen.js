@@ -31,7 +31,7 @@ export default class SettingScreen extends React.Component {
                                 onPress={()=>{
                                     this.props.navigation.navigate('TopicScreen', {
                                         type: 'helper',
-                                    });
+                                    })
                                 }}
                                 style={styles.selectButton}
                             >

@@ -8,21 +8,25 @@ export default class SettingScreen extends React.Component {
         title: 'Kiite’s Messenger',
     };
 
-    gotoLogin = () => {
+    findMatcher = (topic) => {
         const { navigation } = this.props
-        navigation.navigate('Login')
+        let userData = {
+            type: navigation.getParam('type', null),
+            topic: topic
+        }
+        navigation.navigate('ChatScreen', {
+            userData: userData,
+        })
     }
 
     render(){
         return (
             <View style={styles.container}>
                 <View style={styles.typeBox}>
-                    <Text style={{fontWeight:"bold",fontSize:vh(2.098),marginTop:vh(1.649)}} >Choose your topic</Text>
+                    <Text style={{fontWeight:"bold",fontSize:vh(2.098),marginTop:vh(4.34782)}} >Choose your topic</Text>
                     <View style={styles.selectBox}>
                         <TouchableOpacity 
-                            onPress={()=>{
-                                
-                            }}
+                            onPress={this.findMatcher("love")}
                             style={styles.selectButton}
                         >
                             <View style={styles.buttontext} >
@@ -32,9 +36,7 @@ export default class SettingScreen extends React.Component {
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity 
-                            onPress={()=>{
-                                
-                            }}
+                            onPress={this.findMatcher("education")}
                             style={styles.selectButton}
                         >
                             <View style={styles.buttontext} >
@@ -44,9 +46,7 @@ export default class SettingScreen extends React.Component {
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity 
-                            onPress={()=>{
-                                
-                            }}
+                            onPress={this.findMatcher("general")}
                             style={styles.selectButton}
                         >
                             <View style={styles.buttontext} >
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F8F8F8',
         alignItems: 'center',
         width: vh(48.2758),
-        height:vh(46.6266),
+        height:vh(44),
         borderRadius: vh(0.9)
     },
     innerBox:{
@@ -87,19 +87,17 @@ const styles = StyleSheet.create({
         marginTop:vh(2.84857)
     },
     selectButton:{
-        marginTop:vh(1),
+        marginTop:vh(4.34782),
         backgroundColor:'#8DE5DE',
-        width:vh(13.7931),
-        height: vh(3.7481),
+        width:vh(24.28785),
+        height: vh(5.997),
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: vh(0.85)
+        borderRadius: vh(0.85),
+
     },
     typeText:{
         fontSize:vh(1.64917),
         fontWeight:"bold"
     },
-    usernumberText:{
-        fontSize:vh(1.49925)
-    }
 });
