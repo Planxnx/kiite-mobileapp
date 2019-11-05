@@ -1,7 +1,7 @@
 import React from 'react';
 import { AsyncStorage,StyleSheet, Text, View ,Button } from 'react-native';
 
-export default class SettingScreen extends React.Component {
+export default class ChatScreen extends React.Component {
 
     static navigationOptions = {
         title: 'Kiite’s Messenger',
@@ -17,7 +17,7 @@ export default class SettingScreen extends React.Component {
         return (
             <View style={styles.container}>
                 <Text>
-                    Chat
+                    ChatScreen
                 </Text>
                 <Text>
                     User Data:
