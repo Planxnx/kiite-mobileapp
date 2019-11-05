@@ -8,14 +8,24 @@ export default class SettingScreen extends React.Component {
         title: 'Kiite’s Messenger',
     };
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoading: false,
+        }
+    }
+    
+    componentDidMount = () => {
+        
+    }
+
     findMatcher = (topic) => {
         const { navigation } = this.props
-        let userData = {
-            type: navigation.getParam('type', null),
-            topic: topic
-        }
-        navigation.navigate('ChatScreen', {
-            userData: userData,
+        navigation.navigate('FindScreen', {
+            userData: {
+                type: navigation.getParam('type', null),
+                topic: topic
+            },
         })
     }
 
@@ -26,7 +36,7 @@ export default class SettingScreen extends React.Component {
                     <Text style={{fontWeight:"bold",fontSize:vh(2.098),marginTop:vh(4.34782)}} >Choose your topic</Text>
                     <View style={styles.selectBox}>
                         <TouchableOpacity 
-                            onPress={this.findMatcher("love")}
+                            onPress={()=>{this.findMatcher("love")}}
                             style={styles.selectButton}
                         >
                             <View style={styles.buttontext} >
@@ -36,7 +46,7 @@ export default class SettingScreen extends React.Component {
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity 
-                            onPress={this.findMatcher("education")}
+                            onPress={()=>{this.findMatcher("education")}}
                             style={styles.selectButton}
                         >
                             <View style={styles.buttontext} >
@@ -46,7 +56,7 @@ export default class SettingScreen extends React.Component {
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity 
-                            onPress={this.findMatcher("general")}
+                            onPress={()=>{this.findMatcher("general")}}
                             style={styles.selectButton}
                         >
                             <View style={styles.buttontext} >
