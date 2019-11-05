@@ -3,12 +3,14 @@ import {createStackNavigator} from 'react-navigation-stack';
 
 import TypeScreen from '../views/TypeScreen/TypeScreen'
 import TopicScreen from '../views/TopicScreen/TopicScreen'
+import FindScreen from '../views/FindScreen/FindScreen'
 import ChatScreen from '../views/ChatScreen/ChatScreen'
 
 const ChatStack = createStackNavigator({
     TypeScreen: TypeScreen,
-    TopicScreen:TopicScreen,
-    ChatScreen:ChatScreen,
+    TopicScreen: TopicScreen,
+    FindScreen: FindScreen,
+    ChatScreen: ChatScreen,
   },
   {
     initialRouteName: 'TypeScreen',
@@ -25,5 +27,17 @@ const ChatStack = createStackNavigator({
         },
     },
   });
+
+  ChatStack.navigationOptions = ({ navigation }) => {
+    let tabBarVisible = true;
+    if (navigation.state.index > 1) {
+      tabBarVisible = false;
+    }
+  
+    return {
+      tabBarVisible,
+    };
+  };
+
 
 export default ChatStack;
