@@ -1,12 +1,36 @@
 import React from 'react';
 import { AsyncStorage,StyleSheet, Text, View ,Image,TouchableOpacity } from 'react-native';
 import { vh,vw } from 'react-native-expo-viewport-units';
+import io from 'socket.io-client';
 
 export default class SettingScreen extends React.Component {
 
     static navigationOptions = {
         title: 'Kiite’s Messenger',
     };
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoading: false,
+            queueData: {
+                userQueue: 0,
+                helperQueue: 0
+            }
+        }
+    }
+
+    componentDidMount = () => {
+        this.socket = io('https://cloudarch-ite.appspot.com');
+        this.socket.on('queue_chat', (data)=>{
+            this.setState({
+                queueData : data
+            })
+        });
+    }
+
+    componentWillUnmount = () => {
+        this.socket.disconnect()
+    }
 
     gotoLogin = () => {
         const { navigation } = this.props
@@ -42,7 +66,7 @@ export default class SettingScreen extends React.Component {
                                 </View>
                             </TouchableOpacity>
                             <Text style={styles.usernumberText}>
-                                0 users in queue
+                                {this.state.queueData.helperQueue} helpers in queue
                             </Text>
                         </View>
                         <View style={styles.innerBox}>
@@ -68,7 +92,7 @@ export default class SettingScreen extends React.Component {
                                 </View>
                             </TouchableOpacity>
                             <Text style={styles.usernumberText}>
-                                19 users in queue
+                                {this.state.queueData.userQueue} users in queue
                             </Text>
                         </View>
                     </View>
