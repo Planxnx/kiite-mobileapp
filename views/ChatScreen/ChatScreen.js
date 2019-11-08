@@ -7,9 +7,25 @@ export default class ChatScreen extends React.Component {
         title: 'Kiite’s Messenger',
     };
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoading: false,
+        } 
+    }
+
+    componentDidMount() {
+        const { navigation } = this.props
+        this.socket = navigation.getParam('socket', 'null')
+    }
+
     gotoLogin = () => {
         const { navigation } = this.props
         navigation.navigate('Login')
+    }
+
+    componentWillUnmount = () => {
+        this.socket.disconnect()
     }
 
     render(){
