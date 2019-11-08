@@ -3,6 +3,7 @@ import { AsyncStorage,StyleSheet, Text, View ,Button } from 'react-native';
 import io from 'socket.io-client';
 import FindingComponent from  './components/FindComp'
 import ShowStatComponent from  './components/ShowStat'
+import { vh } from 'react-native-expo-viewport-units';
 
 export default class FindScreen extends React.Component {
 
@@ -32,19 +33,20 @@ export default class FindScreen extends React.Component {
             topic: userData.topic,
         })
         AsyncStorage.multiGet(['username','token','role']).then((data) => {
-          this.setState({
-            username:data[0][1],
-            token:data[1][1],
-            role:data[2][1],
-          });
-          //ต้องรอดึง username ให้เสร็จก่อนถึงจะ  findchat ได้
-          this.socket.emit('find_chat', {
-            type: userData.type,
-            token: this.state.token,
-            topic: userData.topic,
-			username: this.state.username,
+            this.setState({
+                username:data[0][1],
+                token:data[1][1],
+                role:data[2][1],
+            })
+            //ต้องรอดึง username ให้เสร็จก่อนถึงจะ  findchat ได้
+            this.socket.emit('find_chat', {
+                type: userData.type,
+                token: this.state.token,
+                topic: userData.topic,
+                username: this.state.username,
+            });
         });
-        });
+
         this.socket.on('queue_chat', (data)=>{
             this.setState({
                 queueData : data
@@ -68,7 +70,7 @@ export default class FindScreen extends React.Component {
                         this.props.navigation.navigate('ChatScreen', {
                             socket: this.socket,
                         });
-                    }, 2500)
+                    }, 3500)
                 }, 1000)
             }, 1500)
         });
@@ -89,26 +91,25 @@ export default class FindScreen extends React.Component {
         }
     }
 
-    getShowStatComp = () =>{
-        const {isShow} = this.state
+    getComponent = () =>{
+        const { isShow,matchName,yourName,matcherStat,topic } = this.state
         switch (isShow) {
             case false:
                 return  this.getFindingComp()
             case true:
-                return <ShowStatComponent/>
+                return <ShowStatComponent statData = {{
+                    yourName:yourName,
+                    matchName:matchName,
+                    matcherStat:matcherStat,
+                    topic:topic
+                }} />
         }
     }
 
     render(){
-        const { userData,userType,queueData , isLoading} = this.state
-
         return (
             <View style={styles.container}>
-                <Text>
-                    {this.state.username}
-                    {JSON.stringify(userData)}
-                </Text>
-                {this.getShowStatComp()}
+                {this.getComponent()}
             </View>
         );
     }
@@ -119,8 +120,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#2FC4B2',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    paddingTop:vh(16),
+},
   text:{
       fontSize: 20,
       textAlign: "center"
