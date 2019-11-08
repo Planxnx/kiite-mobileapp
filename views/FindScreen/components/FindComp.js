@@ -36,7 +36,6 @@ export default class FindingComponent extends Component  {
 }     
 const styles = StyleSheet.create({
     container: {
-        marginTop:vh(2.998),
         textAlign:'center'
     },
     text:{
