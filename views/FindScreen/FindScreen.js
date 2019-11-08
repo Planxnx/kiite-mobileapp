@@ -2,6 +2,7 @@ import React from 'react';
 import { AsyncStorage,StyleSheet, Text, View ,Button } from 'react-native';
 import io from 'socket.io-client';
 import FindingComponent from  './components/FindComp'
+import ShowStatComponent from  './components/ShowStat'
 
 export default class FindScreen extends React.Component {
 
@@ -18,9 +19,7 @@ export default class FindScreen extends React.Component {
                 userQueue: 0,
                 helperQueue: 0
             }
-        }
-
-        
+        } 
     }
 
     componentDidMount() {
@@ -29,7 +28,8 @@ export default class FindScreen extends React.Component {
         let userData = navigation.getParam('userData', 'null')
         this.setState({
             userData : userData,
-            userType: userData.type
+            userType: userData.type,
+            topic: userData.topic,
         })
         AsyncStorage.multiGet(['username','token','role']).then((data) => {
           this.setState({
@@ -37,40 +37,78 @@ export default class FindScreen extends React.Component {
             token:data[1][1],
             role:data[2][1],
           });
+          //ต้องรอดึง username ให้เสร็จก่อนถึงจะ  findchat ได้
+          this.socket.emit('find_chat', {
+            type: userData.type,
+            token: this.state.token,
+            topic: userData.topic,
+			username: this.state.username,
+        });
         });
         this.socket.on('queue_chat', (data)=>{
             this.setState({
                 queueData : data
             })
         });
-        this.socket.emit('find_chat', {
-            type: userData.type,
-            token: this.state.token
-        });
         
+        this.socket.on('found_chat', (data)=>{
+            setTimeout(()=>{
+                this.setState({
+                    roomID : data.room,
+                    matchName: data.matchName,
+                    yourName: data.yourName,
+                    matcherStat: data.matcherStat,
+                    isLoading : false
+                })
+                setTimeout(()=>{
+                    this.setState({
+                        isShow : true
+                    })
+                    setTimeout(()=>{
+                        this.props.navigation.navigate('ChatScreen', {
+                            socket: this.socket,
+                        });
+                    }, 2500)
+                }, 1000)
+            }, 1500)
+        });
         //เปลี่ยนจาก setTimeout เป็ร socket"foundChat"
-        setTimeout(()=>{
-            this.setState({
-                isLoading : false
-            })
-        }, 2000)
     }
 
     componentWillUnmount = () => {
         this.socket.disconnect()
     }
-    
+
+    getFindingComp = () => {
+        const { userType , queueData , isLoading} = this.state
+        switch (userType) {
+            case "helper":
+                return  <FindingComponent userInQueue = {queueData.helperQueue} isLoading = {isLoading} />
+            case "user":
+                return <FindingComponent userInQueue = {queueData.userQueue} isLoading = {isLoading} />
+        }
+    }
+
+    getShowStatComp = () =>{
+        const {isShow} = this.state
+        switch (isShow) {
+            case false:
+                return  this.getFindingComp()
+            case true:
+                return <ShowStatComponent/>
+        }
+    }
 
     render(){
         const { userData,userType,queueData , isLoading} = this.state
+
         return (
             <View style={styles.container}>
                 <Text>
+                    {this.state.username}
                     {JSON.stringify(userData)}
                 </Text>
-                { userType == "helper" ? <FindingComponent userInQueue = {queueData.helperQueue} isLoading = {isLoading} /> :
-                    <FindingComponent userInQueue = {queueData.userQueue} isLoading = {isLoading} />
-                }
+                {this.getShowStatComp()}
             </View>
         );
     }
