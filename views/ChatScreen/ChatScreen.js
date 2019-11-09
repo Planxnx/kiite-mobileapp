@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform,StyleSheet, Text, View ,ScrollView,TouchableWithoutFeedback ,KeyboardAvoidingView,TextInput,Image,TouchableOpacity  } from 'react-native';
+import { SafeAreaView,Platform,StyleSheet, Text, View ,ScrollView,TouchableWithoutFeedback ,KeyboardAvoidingView,TextInput,Image,TouchableOpacity  } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import OverallMood from  '../../components/OverallMood'
@@ -33,19 +33,22 @@ export default class ChatScreen extends React.Component {
                 {
                     user: 'matcher',
                     text: 'สวัสดีหน้าหี',
-                    mood: 'pos'
+                    mood: 'pos',
+                    time: '22:00',
                 },{
                     user: 'user',
                     text: 'สวัสดีจ้า',
-                    mood: 'pos'
+                    time: '22:00',
                 },{
-                    user: 'user',
+                    user: 'matcher',
                     text: 'รู้สึกแย่จังเลย',
-                    mood: 'neg'
+                    mood: 'neg',
+                    time: '22:01',
                 },{
                     user: 'matcher',    
                     text: 'This method has the advantage of fonts being copied from this module at build time so that the fonts and JS are always in sync, making upgrades painless.',
-                    mood: 'pos'
+                    mood: 'neg',
+                    time: '22:02',
                 }
             ]
         }
@@ -55,65 +58,88 @@ export default class ChatScreen extends React.Component {
         const { navigation } = this.props
         this.socket = navigation.getParam('socket', 'null')
     }
-
-    gotoLogin = () => {
-        const { navigation } = this.props
-        navigation.navigate('Login')
-    }
-
+    
     sendMessage = () => {
+        let today = new Date() 
+        let time = today.getHours() + ":" + today.getMinutes()
         let messageData = {
             user: 'user',
             text: this.state.messageInput,
+            mood: today%2 == 0 ? "pos" : "neg",
+            time: time
         }
         this.setState({ 
-            message: [...this.state.message, messageData] 
+            message: [...this.state.message, messageData],
+            messageInput: "" 
         })
     }
 
     componentWillUnmount = () => {
-        // this.socket.disconnect()
+        this.socket.disconnect()
+    }
+
+    findOverallMoodPercent = () => {
+        let posCount = 0
+        let negCount = 0
+        this.state.message.map((data,key)=>{
+            if(data.mood == 'pos'){
+                posCount += 1
+            }else if (data.mood == 'neg'){
+                negCount += 1
+            }
+        })
+        return {
+            posPercent: posCount/(posCount+negCount)*100,
+            negPercent: negCount/(posCount+negCount)*100
+        }
     }
 
     render(){
         let MessageBoxes =  this.state.message.map((data,key)=>{
-            return <MessageBox user = {data.user} text={data.text}  />
+            return <MessageBox key={key} user = {data.user} text={data.text} time={data.time}  />
         })
-        
+        let moodPercent = this.findOverallMoodPercent()
         return (
             <View style={styles.container}>
-                <OverallMood posPercent={0} negPercent={0} />
-                <ScrollView>
-                    {MessageBoxes}
-                </ScrollView>
-                <KeyboardAvoidingView style={styles.messageInput} behavior="padding" enabled>
-                    <TouchableOpacity
-                        onPress={()=>{}}
-                    >
-                        <Image
-                            style={styles.imgMic}
-                            source={require('./assets/mic.png')}
-                        />
-                    </TouchableOpacity>
-                    <View style={styles.textInputBox} >
-                        <TextInput 
-                            style={styles.textInput}
-                            returnKeyType='none'
-                            multiline={true}
-                            onChangeText={messageInput => {
-                                this.setState({ messageInput });
-                            }}
-                            value={this.state.messageInput}
-                        />
+                <KeyboardAvoidingView 
+                    style={styles.keyboardAvoidContainer}  
+                    behavior="padding"
+                    keyboardVerticalOffset={vh(8.99550)} 
+                    enabled 
+                >
+                    <OverallMood posPercent={moodPercent.posPercent} negPercent={moodPercent.negPercent} />
+                    <ScrollView>
+                        {MessageBoxes}
+                    </ScrollView>
+                    <View style={styles.messageInput}>
+                        <TouchableOpacity
+                            onPress={()=>{}}
+                        >
+                            <Image
+                                style={styles.imgMic}
+                                source={require('./assets/mic.png')}
+                            />
+                        </TouchableOpacity>
+                        <View style={styles.textInputBox} >
+                            <TextInput 
+                                style={styles.textInput}
+                                returnKeyType='none'
+                                multiline={true}
+                                onChangeText={messageInput => {
+                                    this.setState({ messageInput });
+                                }}
+                                value={this.state.messageInput}
+                            />
+                        </View>
+                        <TouchableOpacity
+                            style={styles.buttonInput}
+                            onPress={()=>{this.sendMessage()}}
+                        >
+                            <Text>
+                                Send
+                            </Text>
+                        </TouchableOpacity>
                     </View>
-                    <TouchableOpacity
-                        style={styles.buttonInput}
-                        onPress={()=>{this.sendMessage()}}
-                    >
-                        <Text>
-                            Send
-                        </Text>
-                    </TouchableOpacity>
                 </KeyboardAvoidingView>
             </View>
         );
@@ -126,12 +152,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#EDEDED',
     alignItems: 'center',
   },
+  keyboardAvoidContainer: {
+    flex: 1,
+  },
   text:{
       fontSize: 20,
       textAlign: "center"
   },
   messageInput:{
-      bottom:vh(50),
       minHeight: vh(7),
       maxHeight:vh(40),
       width: vh(56.221889),

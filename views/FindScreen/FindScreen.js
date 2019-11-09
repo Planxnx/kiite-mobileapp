@@ -69,6 +69,7 @@ export default class FindScreen extends React.Component {
                     setTimeout(()=>{
                         this.props.navigation.navigate('ChatScreen', {
                             socket: this.socket,
+                            chatData: data
                         });
                     }, 3500)
                 }, 1000)
