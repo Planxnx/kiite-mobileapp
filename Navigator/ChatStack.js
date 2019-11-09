@@ -33,7 +33,6 @@ const ChatStack = createStackNavigator({
     if (navigation.state.index > 1) {
       tabBarVisible = false;
     }
-  
     return {
       tabBarVisible,
     };
