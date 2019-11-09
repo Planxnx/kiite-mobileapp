@@ -52,9 +52,7 @@ export default class Messages extends Component  {
         )
     }
     getComponent = () =>{
-        const { user } = this.props;
-        let today = new Date();
-        let time = today.getHours() + ":" + today.getMinutes()
+        const { user,time } = this.props;
         switch (user) {
             case "matcher":
                 return  this.getMatcherMessage(time)
