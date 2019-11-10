@@ -65,6 +65,7 @@ export default class ChatScreen extends React.Component {
             })
             Alert.alert(
                 data,
+                'กดออก',
                 [
                   {text: 'OK',
                   onPress: () => {
