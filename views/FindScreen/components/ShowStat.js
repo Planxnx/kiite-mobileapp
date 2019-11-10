@@ -24,8 +24,17 @@ export default class ShowstatComponent extends Component  {
 
     render() {
         const { statData } = this.props
-        let posPercent =  (statData.matcherStat.pos/(statData.matcherStat.neg+statData.matcherStat.pos))*100
-        let negPercent = 100-posPercent
+        let posPercent,negPercent
+        if (statData.matcherStat.pos == 0 && statData.matcherStat.neg == 0){
+            posPercent = 50
+            negPercent = 50
+        }else {
+            posPercent =  (statData.matcherStat.pos/(statData.matcherStat.neg+statData.matcherStat.pos))*100
+            negPercent = 100-posPercent
+            // posLen = (posPercent/100)*vh(50.97451)
+            // negLen = (negPercent/100)*vh(50.97451)
+        }
+        
         return (
             <View>
                 <View style={styles.container}>
