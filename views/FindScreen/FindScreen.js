@@ -67,6 +67,7 @@ export default class FindScreen extends React.Component {
                         isShow : true
                     })
                     setTimeout(()=>{
+                        data.topic = this.state.topic
                         this.props.navigation.navigate('ChatScreen', {
                             socket: this.socket,
                             chatData: data
