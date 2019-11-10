@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView,Platform,StyleSheet, Text, View ,ScrollView,TouchableWithoutFeedback ,KeyboardAvoidingView,TextInput,Image,TouchableOpacity  } from 'react-native';
+import { Alert,Platform,StyleSheet, Text, View ,ScrollView,TouchableWithoutFeedback ,KeyboardAvoidingView,TextInput,Image,TouchableOpacity  } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import OverallMood from  '../../components/OverallMood'
@@ -35,20 +35,6 @@ export default class ChatScreen extends React.Component {
                     text: 'สวัสดีหน้าหี',
                     mood: 'pos',
                     time: '22:00',
-                },{
-                    user: 'user',
-                    text: 'สวัสดีจ้า',
-                    time: '22:00',
-                },{
-                    user: 'matcher',
-                    text: 'รู้สึกแย่จังเลย',
-                    mood: 'neg',
-                    time: '22:01',
-                },{
-                    user: 'matcher',    
-                    text: 'This method has the advantage of fonts being copied from this module at build time so that the fonts and JS are always in sync, making upgrades painless.',
-                    mood: 'neg',
-                    time: '22:02',
                 }
             ]
         }
@@ -56,7 +42,38 @@ export default class ChatScreen extends React.Component {
 
     componentDidMount() {
         const { navigation } = this.props
+        this.setState({
+            chatData: navigation.getParam('chatData','null')
+        })
         this.socket = navigation.getParam('socket', 'null')
+        this.socket.on('receive_chat', (data)=>{
+            let today = new Date() 
+            let time = today.getHours() + ":" + today.getMinutes()
+            let messageData = {
+                user: 'matcher',
+                text: data.text,
+                mood: data.mood,
+                time: time
+            }
+            this.setState({
+                message: [...this.state.message, messageData]
+            })
+        });
+        this.socket.on('end_chat', (data)=>{
+            this.setState({
+                disconnected: true
+            })
+            Alert.alert(
+                data,
+                [
+                  {text: 'OK',
+                  onPress: () => {
+                    this.props.navigation.navigate('TypeScreen')
+                    this.componentWillUnmount()
+                  }},
+                ],
+              )
+        });
     }
     
     sendMessage = () => {
@@ -65,13 +82,19 @@ export default class ChatScreen extends React.Component {
         let messageData = {
             user: 'user',
             text: this.state.messageInput,
-            mood: today%2 == 0 ? "pos" : "neg",
             time: time
         }
         this.setState({ 
             message: [...this.state.message, messageData],
             messageInput: "" 
         })
+        this.socket.emit('send_chat', {
+            username: this.state.username,
+            topic: this.state.chatData.topic,
+            room: this.state.chatData.room,
+            text: this.state.messageInput
+        });
+
     }
 
     componentWillUnmount = () => {
