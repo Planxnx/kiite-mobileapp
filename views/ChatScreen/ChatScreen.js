@@ -147,7 +147,6 @@ export default class ChatScreen extends React.Component {
                         <View style={styles.textInputBox} >
                             <TextInput 
                                 style={styles.textInput}
-                                returnKeyType='none'
                                 multiline={true}
                                 onChangeText={messageInput => {
                                     this.setState({ messageInput });
