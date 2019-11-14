@@ -39,28 +39,22 @@ export default class CreateScreen extends React.Component {
               {text: 'Accept',
               onPress: () => {
                 this.setState({
-                    termCheck: true
+                    termCheck: true,
                 });
+                this.signUp()
               }},
               {
                 text: 'Not now',
                 onPress: () => {
                     this.setState({
-                        termCheck: false
+                        termCheck: false,
+                        isLoading:false
                     });
                 },
                 style: 'cancel',
               },
             ],
           )
-        if (!this.state.termCheck) {
-            this.setState({
-                isLoading: false
-            });
-            return
-        }else{
-            this.signUp()
-        }
     }
 
     signUp = async () => {
@@ -155,12 +149,16 @@ export default class CreateScreen extends React.Component {
             if(responseJson.status == 200){
                 this.setState({
                     isLoading: false,
-                    respData: responseJson
                 });
-                await AsyncStorage.setItem('username', responseJson.data.username);
-                await AsyncStorage.setItem('role', responseJson.data.role);
-                await AsyncStorage.setItem('token', responseJson.data.token);
-                this.props.navigation.navigate('App');
+                Alert.alert(
+                    '',
+                    "Account successfully created",
+                    [
+                      {text: 'OK'},
+                    ],
+                    {cancelable: false},
+                )
+                this.props.navigation.navigate('Login');
             }else if(responseJson.status == 401){
                 this.setState({
                     isLoading: false,
@@ -228,7 +226,9 @@ export default class CreateScreen extends React.Component {
                         autoCapitalize = "none"
                         maxLength = {30}
                         onChangeText={usernameInput => {
-                            this.setState({ usernameInput });
+                            this.setState({ 
+                                usernameInput : usernameInput.trim()
+                            });
                         }}
                         value={this.state.usernameInput}
                     />
@@ -245,7 +245,7 @@ export default class CreateScreen extends React.Component {
                         autoCapitalize = "none"
                         keyboardType = "email-address"
                         onChangeText={emailInput => {
-                            this.setState({ emailInput });
+                            this.setState({ emailInput:emailInput.trim() });
                         }}
                         value={this.state.emailInput}
                     />
@@ -263,7 +263,7 @@ export default class CreateScreen extends React.Component {
                         maxLength = {24}
                         secureTextEntry = {true}
                         onChangeText={passwordInput => {
-                            this.setState({ passwordInput });
+                            this.setState({ passwordInput:passwordInput.trim() });
                         }}
                         value={this.state.passwordInput}
                     />
@@ -281,7 +281,7 @@ export default class CreateScreen extends React.Component {
                         maxLength = {24}
                         secureTextEntry = {true}
                         onChangeText={repasswordInput => {
-                            this.setState({ repasswordInput });
+                            this.setState({ repasswordInput:repasswordInput.trim() });
                         }}
                         value={this.state.repasswordInput}
                     />
