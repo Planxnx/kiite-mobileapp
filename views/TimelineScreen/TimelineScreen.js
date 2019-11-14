@@ -2,7 +2,7 @@ import React from 'react';
 import { AsyncStorage,StyleSheet,Text, ActivityIndicator, View ,ScrollView  ,TouchableOpacity,Image } from 'react-native';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import TimelineStatus from  './components/timelineStatus'
-import OverallStatus from  './components/overallStatus'
+import OverallMood from  '../../components/OverallMood'
 
 export default class TimelineScreen extends React.Component {
     constructor(props) {
@@ -11,9 +11,7 @@ export default class TimelineScreen extends React.Component {
             username: "token",
             passwordInput: "",
             isLoading: false,
-            respData:{
-                data:[{mood:"pos"}]
-            }
+            message:[{}]
         }
     }
 
@@ -49,8 +47,7 @@ export default class TimelineScreen extends React.Component {
         this.setState({
             isLoading: true
         });
-        fetch('http://5db18f0de9751d0014ccf91a.mockapi.io/api/vtest/timeline', {
-        // fetch('https://cloudarch-ite.appspot.com/timeline', {
+        fetch('https://cloudarch-ite.appspot.com/timeline', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -61,13 +58,12 @@ export default class TimelineScreen extends React.Component {
         .then(response=>response.json())
         .then((responseJson) => {
             this.setState({
-                respData: responseJson,
-            }); 
-            this._findMoodCount()
-            this.setState({
-                isLoading: false
-            });                
+                message: responseJson.data,
+            });               
         })
+        this.setState({
+            isLoading: false
+        }); 
     }
 
     _signOutAsync = async () => {
@@ -79,30 +75,22 @@ export default class TimelineScreen extends React.Component {
         this.props.navigation.navigate('Setting');
     };
 
-    _findMoodCount = async () => {
+    findOverallMoodPercent = () => {
         let posCount = 0
         let negCount = 0
-        for (let i = 0; i < this.state.respData.data.length; i++){
-            if (this.state.respData.data[i].mood == "pos"){
-                posCount +=1
-            }else if (this.state.respData.data[i].mood == "neg"){
-                negCount +=1
+        this.state.message.map((data,key)=>{
+            if(data.mood == 'pos'){
+                posCount += 1
+            }else if (data.mood == 'neg'){
+                negCount += 1
             }
+        })
+        let posPercent=posCount/(posCount+negCount)*100
+        let negPercent=negCount/(posCount+negCount)*100
+        return {
+            posPercent:posPercent,
+            negPercent: negPercent
         }
-        if (posCount == 0 && negCount == 0){
-            posCount = 50
-            await AsyncStorage.setItem('posCount', posCount.toString())
-        }else if (posCount == 0 && negCount > 0){
-            posCount = 2
-            await AsyncStorage.setItem('posCount', posCount.toString())
-        }else if (posCount > 0 && negCount == 0){
-            posCount = 98
-            await AsyncStorage.setItem('posCount', posCount.toString())
-        } else {
-            posCount = posCount/(posCount+negCount)*100
-            await AsyncStorage.setItem('posCount', posCount.toString())
-        }
-        
     }
 
     render(){
@@ -113,20 +101,20 @@ export default class TimelineScreen extends React.Component {
                 </View>       
             );
         } else{
-            let TimelinseStatuses =  this.state.respData.data.map((data,key)=>{
+            let TimelinseStatuses =  this.state.message.map((data,key)=>{
                 return <TimelineStatus key = {key} text={data.text} />
             })
+            let moodPercent = this.findOverallMoodPercent()
             return (
                 <View style={styles.container}>
-                    <OverallStatus/>
+                    <OverallMood posPercent={moodPercent.posPercent} negPercent={moodPercent.negPercent} />
+                    
                     <ScrollView style={{flex: 1}} >
                         {TimelinseStatuses}
                     </ScrollView>
                 </View>       
             );
         }
-
-        
     }
     
 }
