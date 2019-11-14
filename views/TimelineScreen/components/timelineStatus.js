@@ -10,20 +10,27 @@ import { vh, vw } from 'react-native-expo-viewport-units';
 
 
 export default class TimelineStatus extends Component  {
-    
     render() {
-      return (
-        <View style={styles.container}>
-            <View style={styles.innerBox}>
-                <Image
-                        style={styles.imgStatus}
-                        source={require('../assets/user.png')}
-                />
-                <Text style={styles.text}>{this.props.text}</Text>
+        let randNum = Math.floor(Math.random() * 15658724)+10
+        let hexString = randNum.toString(16);
+        let colorString = parseInt(hexString, 16);
+        const styles2 = StyleSheet.create({
+            imgColor:{
+                backgroundColor: colorString
+            }
+        })
+        return (
+            <View style={styles.container}>
+                <View style={styles.innerBox}>
+                    <Image
+                            style={[styles.imgStatus,styles2.imgColor]}
+                            source={require('../assets/user.png')}
+                    />
+                    <Text style={styles.text}>{this.props.text}</Text>
+                </View>
+                <View style={styles.bottomLine} />
             </View>
-            <View style={styles.bottomLine} />
-        </View>
-      )
+        )
     }
 }     
 const styles = StyleSheet.create({
@@ -40,11 +47,12 @@ const styles = StyleSheet.create({
     innerBox:{
         flexDirection: 'row',
         alignSelf: 'center',
-        width: vw(90.4266),
+        width: vw(90.4266)
     },
     imgStatus:{
         width: vh(6.74662),
-        height:vh(6.74662)
+        height:vh(6.74662),
+        backgroundColor:"#BFBFBF"
     },
     bottomLine:{
         marginTop:vh(2.998),
