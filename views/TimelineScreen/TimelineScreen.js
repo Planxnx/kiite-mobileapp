@@ -1,8 +1,9 @@
 import React from 'react';
-import { AsyncStorage,StyleSheet,RefreshControl, ActivityIndicator, View ,ScrollView  ,TouchableOpacity,Image } from 'react-native';
+import { AsyncStorage,StyleSheet,RefreshControl, ActivityIndicator, View ,ScrollView  ,TouchableOpacity,Image,Text } from 'react-native';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import TimelineStatus from  './components/timelineStatus'
 import OverallMood from  '../../components/OverallMood'
+import io from 'socket.io-client';
 
 export default class TimelineScreen extends React.Component {
     constructor(props) {
@@ -12,7 +13,8 @@ export default class TimelineScreen extends React.Component {
             passwordInput: "",
             isLoading: false,
             refreshing: false,
-            message:[{}]
+            message:[{}],
+            newStatus: false,
         }
     }
 
@@ -33,6 +35,7 @@ export default class TimelineScreen extends React.Component {
     })
 
     componentDidMount() {
+        this.socket = io('https://cloudarch-ite.appspot.com');
         AsyncStorage.multiGet(['username','token','role']).then((data) => {
           this.setState({
             username:data[0][1],
@@ -40,6 +43,11 @@ export default class TimelineScreen extends React.Component {
             role:data[2][1]
           });
           this._fetchStatus(data[1][1])
+        })
+        this.socket.on('timeline', (data)=>{
+            this.setState({
+                newStatus: true
+            });
         });
 
     }
@@ -99,7 +107,10 @@ export default class TimelineScreen extends React.Component {
             <RefreshControl
                 refreshing={this.state.refreshing}
                 onRefresh={()=>{
-                    this.setState({refreshing:true})
+                    this.setState({
+                        refreshing:true,
+                        newStatus: false
+                    })
                     this._fetchStatus(this.state.token)
                     setTimeout(()=>{
                         this.setState({refreshing:false})
@@ -107,6 +118,28 @@ export default class TimelineScreen extends React.Component {
                 }}
             />
         )
+    }
+
+    getNewStatus = () => {
+        const { newStatus } = this.state
+        switch (newStatus) {
+            case true:
+                return (
+                    <View style={styles.newStatus}>
+                        <Text style={styles.text}>
+                            Pull down to refresh
+                        </Text>
+                    </View>
+                )
+            case false:
+                return (
+                    <View></View>
+                )
+        }
+    }
+
+    componentWillUnmount = () => {
+        this.socket.disconnect()
     }
 
     render(){
@@ -125,12 +158,14 @@ export default class TimelineScreen extends React.Component {
             return (
                 <View style={styles.container}>
                     <OverallMood posPercent={moodPercent.posPercent} negPercent={moodPercent.negPercent} />
-                    
+                    {this.getNewStatus()}
                     <ScrollView 
                         style={{flex: 1}} 
                         refreshControl={this._refreshControl()}
                     >
-                        {TimelinseStatuses}
+                        <View style={{flex: 1,flexDirection:"column-reverse"}} >
+                            {TimelinseStatuses}
+                        </View>
                     </ScrollView>
                 </View>       
             );
@@ -147,8 +182,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     text:{
-        fontSize: 20,
-        textAlign: "center"
+        fontSize: vh(1.799),
+        textAlign: "center",
+        color:"#F8F8F8"
     },
     imgInput:{
         width:vh(3.44),
@@ -157,5 +193,9 @@ const styles = StyleSheet.create({
         marginBottom: vh(1.4),
         // marginVertical: vh(1.199),
         // marginHorizontal: vh(1.049)
-        }
+    },
+    newStatus:{
+        width: vw(100),
+        backgroundColor: "#C4C4C4"
+    }
 });
