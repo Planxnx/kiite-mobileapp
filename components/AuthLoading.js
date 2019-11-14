@@ -16,25 +16,16 @@ export default class AuthLoadingScreen extends React.Component {
       this._bootstrapAsync();
     }
   
-    // Fetch the token from storage then navigate to our appropriate place
     _bootstrapAsync = async () => {
       const token = await AsyncStorage.getItem('token');
-  
-      // This will switch to the App screen or Auth screen and this loading
-      // screen will be unmounted and thrown away.
       setTimeout(() => {
         this.props.navigation.navigate(token ? 'App' : 'Auth');
       }, 0);
-      
     };
   
-    // Render any loading content that you like here
     render() {
       return (
         <View style={styles.container}>
-            <Text style={styles.text}>
-                Kiite
-            </Text>
             <ActivityIndicator />
             <StatusBar barStyle="default" />
         </View>
