@@ -1,5 +1,5 @@
 import React from 'react';
-import { AsyncStorage,StyleSheet,Text, ActivityIndicator, View ,ScrollView  ,TouchableOpacity,Image } from 'react-native';
+import { AsyncStorage,StyleSheet,RefreshControl, ActivityIndicator, View ,ScrollView  ,TouchableOpacity,Image } from 'react-native';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import TimelineStatus from  './components/timelineStatus'
 import OverallMood from  '../../components/OverallMood'
@@ -11,6 +11,7 @@ export default class TimelineScreen extends React.Component {
             username: "token",
             passwordInput: "",
             isLoading: false,
+            refreshing: false,
             message:[{}]
         }
     }
@@ -93,6 +94,21 @@ export default class TimelineScreen extends React.Component {
         }
     }
 
+    _refreshControl(){
+        return (
+            <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={()=>{
+                    this.setState({refreshing:true})
+                    this._fetchStatus(this.state.token)
+                    setTimeout(()=>{
+                        this.setState({refreshing:false})
+                    },750)
+                }}
+            />
+        )
+    }
+
     render(){
         if(this.state.isLoading){
             return (
@@ -105,11 +121,15 @@ export default class TimelineScreen extends React.Component {
                 return <TimelineStatus key = {key} text={data.text} />
             })
             let moodPercent = this.findOverallMoodPercent()
+            
             return (
                 <View style={styles.container}>
                     <OverallMood posPercent={moodPercent.posPercent} negPercent={moodPercent.negPercent} />
                     
-                    <ScrollView style={{flex: 1}} >
+                    <ScrollView 
+                        style={{flex: 1}} 
+                        refreshControl={this._refreshControl()}
+                    >
                         {TimelinseStatuses}
                     </ScrollView>
                 </View>       
