@@ -36,7 +36,8 @@ export default class ChatScreen extends React.Component {
                     mood: 'pos',
                     time: '22:00',
                 }
-            ]
+            ],
+            messageEmpty:true
         }
     }
 
@@ -77,6 +78,14 @@ export default class ChatScreen extends React.Component {
         });
     }
     
+    textEmpty = (text) =>{
+        if(text == ""){
+            return true
+        }else{
+            return false
+        }
+    }
+
     sendMessage = () => {
         let today = new Date() 
         let time = today.getHours() + ":" + today.getMinutes()
@@ -128,7 +137,7 @@ export default class ChatScreen extends React.Component {
                 <KeyboardAvoidingView 
                     style={styles.keyboardAvoidContainer}  
                     behavior="padding"
-                    keyboardVerticalOffset={vh(8.99550)} 
+                    keyboardVerticalOffset={vh(8.6)} 
                     enabled 
                 >
                     <OverallMood posPercent={moodPercent.posPercent} negPercent={moodPercent.negPercent} />
@@ -136,29 +145,32 @@ export default class ChatScreen extends React.Component {
                         {MessageBoxes}
                     </ScrollView>
                     <View style={styles.messageInput}>
-                        <TouchableOpacity
-                            onPress={()=>{}}
-                        >
-                            <Image
-                                style={styles.imgMic}
-                                source={require('./assets/mic.png')}
-                            />
-                        </TouchableOpacity>
                         <View style={styles.textInputBox} >
                             <TextInput 
                                 style={styles.textInput}
                                 multiline={true}
                                 onChangeText={messageInput => {
-                                    this.setState({ messageInput });
+                                    this.setState({ 
+                                        messageInput:messageInput.trim(),
+                                        messageEmpty: this.textEmpty(messageInput.trim())
+                                    });
                                 }}
                                 value={this.state.messageInput}
                             />
                         </View>
                         <TouchableOpacity
-                            style={styles.buttonInput}
-                            onPress={()=>{this.sendMessage()}}
+                            style={this.state.messageEmpty ? styles.buttonInputDisable : styles.buttonInput}
+                            onPress={()=>{
+                                this.sendMessage(),
+                                this.setState({ 
+                                    messageEmpty: true
+                                });
+                            }}
+                            disabled={this.state.messageEmpty}
                         >
-                            <Text>
+                            <Text 
+                                 style={this.state.messageEmpty ? {color: "#EFEFEF"} : {color: "#000000"}}
+                            >
                                 Send
                             </Text>
                         </TouchableOpacity>
@@ -188,10 +200,12 @@ const styles = StyleSheet.create({
       width: vh(56.221889),
       backgroundColor: '#2FC4B2',
       flexDirection: 'row',
-      alignItems: 'center'
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingVertical: vh(1.2)
   },
   textInputBox:{
-    width: vh(37.1814),
+    width: vh(46.5),
     backgroundColor: '#F8F8F8',
     alignItems: 'center',
     justifyContent: 'center',
@@ -200,22 +214,26 @@ const styles = StyleSheet.create({
     borderRadius:vh(0.89955),
   },
   textInput:{
-    width:vh(35),
+    width:vh(44),
     backgroundColor: '#F8F8F8',
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  imgMic:{
-    width:vh(1.94),
-    height: vh(3.148425),
-    marginHorizontal: vh(2.248875),
   },
   buttonInput:{
     backgroundColor: '#F8F8F8',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: vh(1),
-    marginHorizontal: vh(2.248875),
+    padding: vh(0.88),
+    marginHorizontal: vh(0.5),
     borderRadius:vh(0.89955),
+  },
+  buttonInputDisable:{
+    backgroundColor: '#DDDDDD',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: vh(0.88),
+    marginHorizontal: vh(0.5),
+    borderRadius:vh(0.89955),
+    color: '#E9E9E9'
   }
 });
