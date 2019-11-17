@@ -1,5 +1,5 @@
 import React from 'react';
-import { AsyncStorage,StyleSheet,RefreshControl, ActivityIndicator, View ,ScrollView  ,TouchableOpacity,Image,Text } from 'react-native';
+import { AsyncStorage,StyleSheet,RefreshControl, ActivityIndicator, View ,ScrollView  ,TouchableOpacity,Image,Text,Alert } from 'react-native';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import TimelineStatus from  './components/timelineStatus'
 import OverallMood from  '../../components/OverallMood'
@@ -13,7 +13,7 @@ export default class TimelineScreen extends React.Component {
             passwordInput: "",
             isLoading: false,
             refreshing: false,
-            message:[{}],
+            message:[],
             newStatus: false,
         }
     }
@@ -68,7 +68,7 @@ export default class TimelineScreen extends React.Component {
         .then((responseJson) => {
             this.setState({
                 message: responseJson.data,
-            });               
+            });             
         })
         this.setState({
             isLoading: false
@@ -151,7 +151,7 @@ export default class TimelineScreen extends React.Component {
             );
         } else{
             let TimelinseStatuses =  this.state.message.map((data,key)=>{
-                return <TimelineStatus key = {key} text={data.text} />
+                return <TimelineStatus key = {key} text={data.text} iconType={data.icon.iconType}  iconColor={data.icon.iconColor} time={data.createdDate} />
             })
             let moodPercent = this.findOverallMoodPercent()
             

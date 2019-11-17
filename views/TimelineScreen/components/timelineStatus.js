@@ -10,13 +10,42 @@ import { vh, vw } from 'react-native-expo-viewport-units';
 
 
 export default class TimelineStatus extends Component  {
+
+    getIcon = (iconType) =>{
+        switch (iconType) {
+            case "tiger":
+                return require('../assets/tiger.png')
+            case "elephant":
+                return require('../assets/elephant.png')
+            case "cat":
+                return require('../assets/cat.png')
+            case "dog":
+                return require('../assets/dog.png')
+            case "penguin":
+                return require('../assets/penguin.png')
+            default:
+                return require('../assets/user.png')
+        }
+    }
+
+    getTime = (time) =>{
+        let todayDate = new Date(),
+            createDate = new Date(time)
+        let compare = todayDate-createDate
+        if (compare > 60e3){
+            return `${Math.floor(compare / 60e3)} minutes ago`
+        }
+        else {
+            return `${Math.floor(compare / 1e3)} seconds ago`
+        }
+    }
+
     render() {
-        let randNum = Math.floor(Math.random() * 15658724)+10
-        let hexString = randNum.toString(16);
-        let colorString = parseInt(hexString, 16);
+        const {iconColor,iconType,time} = this.props
+        let compareTime = this.getTime(time)
         const styles2 = StyleSheet.create({
             imgColor:{
-                backgroundColor: colorString
+                backgroundColor: iconColor
             }
         })
         return (
@@ -24,10 +53,13 @@ export default class TimelineStatus extends Component  {
                 <View style={styles.innerBox}>
                     <Image
                             style={[styles.imgStatus,styles2.imgColor]}
-                            source={require('../assets/user.png')}
+                            source={this.getIcon(iconType)}
                     />
                     <Text style={styles.text}>{this.props.text}</Text>
                 </View>
+                <Text>
+                    {compareTime}
+                </Text>
                 <View style={styles.bottomLine} />
             </View>
         )
