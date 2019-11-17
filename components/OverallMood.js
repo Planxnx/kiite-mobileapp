@@ -23,7 +23,10 @@ export default class OverallMood extends Component  {
     render() {
         let { posPercent,negPercent } = this.props;
         let posLen , negLen
-        if(!posPercent){
+        if(!posPercent && !negPercent){
+            posPercent = 50
+            negPercent = 50
+        }else if(!posPercent){
             posPercent = 1
             negPercent = 99
         } else if(!negPercent){

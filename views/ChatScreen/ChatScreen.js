@@ -29,14 +29,7 @@ export default class ChatScreen extends React.Component {
         super(props);
         this.state = {
             disconnected: false,
-            message:[
-                {
-                    user: 'matcher',
-                    text: 'สวัสดีหน้าหี',
-                    mood: 'pos',
-                    time: '22:00',
-                }
-            ],
+            message:[],
             messageEmpty:true
         }
     }
