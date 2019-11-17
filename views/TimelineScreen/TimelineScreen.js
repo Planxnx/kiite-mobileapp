@@ -164,7 +164,7 @@ export default class TimelineScreen extends React.Component {
                         refreshControl={this._refreshControl()}
                     >
                         <View style={{flex: 1,flexDirection:"column-reverse"}} >
-                            {TimelinseStatuses}
+                            {this.state.message.length == 0 ? <Text style={{marginTop:vh(2)}}>Waiting for a new status</Text> : TimelinseStatuses}
                         </View>
                     </ScrollView>
                 </View>       
