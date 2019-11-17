@@ -60,6 +60,7 @@ export default class FindScreen extends React.Component {
                     matchName: data.matchName,
                     yourName: data.yourName,
                     matcherStat: data.matcherStat,
+                    imageSrc: data.imageSrc,
                     isLoading : false
                 })
                 setTimeout(()=>{
@@ -73,7 +74,7 @@ export default class FindScreen extends React.Component {
                             chatData: data
                         });
                     }, 3500)
-                }, 1000)
+                }, 1200)
             }, 1500)
         });
         //เปลี่ยนจาก setTimeout เป็ร socket"foundChat"
@@ -94,7 +95,7 @@ export default class FindScreen extends React.Component {
     }
 
     getComponent = () =>{
-        const { isShow,matchName,yourName,matcherStat,topic } = this.state
+        const { isShow,matchName,yourName,matcherStat,topic,imageSrc } = this.state
         switch (isShow) {
             case false:
                 return  this.getFindingComp()
@@ -103,7 +104,8 @@ export default class FindScreen extends React.Component {
                     yourName:yourName,
                     matchName:matchName,
                     matcherStat:matcherStat,
-                    topic:topic
+                    topic:topic,
+                    imageSrc:imageSrc
                 }} />
         }
     }
