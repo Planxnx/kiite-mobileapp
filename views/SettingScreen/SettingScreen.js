@@ -71,12 +71,6 @@ export default class SettingScreen extends React.Component {
                                 Log Out
                             </Text>
                         </View>
-                        <View style={styles.buttonBoxRight}>
-                            <Image
-                                style={styles.nextbutton}
-                                source={require('./assets/next.png')}
-                            />
-                        </View>
                     </View>
                 </TouchableOpacity>
             </View>
