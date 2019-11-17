@@ -154,7 +154,12 @@ export default class ChatScreen extends React.Component {
                     enabled 
                 >
                     <OverallMood posPercent={moodPercent.posPercent} negPercent={moodPercent.negPercent} />
-                    <ScrollView>
+                    <ScrollView
+                        ref={ref => this.scrollView = ref}
+                        onContentSizeChange={(contentWidth, contentHeight)=>{        
+                            this.scrollView.scrollToEnd({animated: true});
+                        }}
+                    >
                         {MessageBoxes}
                     </ScrollView>
                     <View style={styles.messageInput}>
