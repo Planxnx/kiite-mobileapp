@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert,Platform,StyleSheet, Text, View ,ScrollView,TouchableWithoutFeedback ,KeyboardAvoidingView,TextInput,Image,TouchableOpacity  } from 'react-native';
+import { Alert,Platform,StyleSheet, Text, View ,ScrollView,TouchableWithoutFeedback ,KeyboardAvoidingView,TextInput,AsyncStorage,TouchableOpacity  } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import OverallMood from  '../../components/OverallMood'
@@ -13,7 +13,7 @@ export default class ChatScreen extends React.Component {
             title: chatData.matchName ,
             headerLeft : () => (
                 <TouchableWithoutFeedback 
-                  onPress={()=>{navigation.goBack()}}
+                  onPress={()=>{navigation.pop(3)}}
                   style={{marginLeft:10}}
                 >
                     <View style={{justifyContent:'center',flexDirection: 'row',alignItems: 'center'}}>
@@ -43,13 +43,23 @@ export default class ChatScreen extends React.Component {
 
     componentDidMount() {
         const { navigation } = this.props
+        AsyncStorage.multiGet(['username','token','role']).then((data) => {
+            this.setState({
+              username:data[0][1],
+              token:data[1][1],
+              role:data[2][1]
+            });
+        });
         this.setState({
             chatData: navigation.getParam('chatData','null')
         })
         this.socket = navigation.getParam('socket', 'null')
         this.socket.on('receive_chat', (data)=>{
+            function checkTime(i) {
+                return (i < 10) ? "0" + i : i;
+            }
             let today = new Date() 
-            let time = today.getHours() + ":" + today.getMinutes()
+            let time = checkTime(today.getHours()) + ":" + checkTime(today.getMinutes())
             let messageData = {
                 user: 'matcher',
                 text: data.text,
@@ -65,8 +75,8 @@ export default class ChatScreen extends React.Component {
                 disconnected: true
             })
             Alert.alert(
-                data,
-                'กดออก',
+                '',
+                'Your stranger has been disconnected',
                 [
                   {text: 'OK',
                   onPress: () => {
@@ -87,8 +97,11 @@ export default class ChatScreen extends React.Component {
     }
 
     sendMessage = () => {
+        function checkTime(i) {
+            return (i < 10) ? "0" + i : i;
+        }
         let today = new Date() 
-        let time = today.getHours() + ":" + today.getMinutes()
+        let time = checkTime(today.getHours()) + ":" + checkTime(today.getMinutes())
         let messageData = {
             user: 'user',
             text: this.state.messageInput,

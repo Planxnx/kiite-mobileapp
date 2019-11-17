@@ -25,7 +25,7 @@ export default class Messages extends Component  {
         const { text } = this.props;
         return (
             <View style={styles.userMessageBox}>
-                <Text>
+                <Text style={styles.time}>
                     {time}
                 </Text>
                 <View style={styles.userMessage} >
@@ -45,7 +45,7 @@ export default class Messages extends Component  {
                         {text}
                     </Text>
                 </View>
-                <Text>
+                <Text style={styles.time}>
                     {time}
                 </Text>
             </View>
@@ -93,11 +93,19 @@ const styles = StyleSheet.create({
         alignSelf:'flex-start',
         flexDirection: 'row',
         alignItems: 'flex-end',
+        marginHorizontal: vh(1.7991),
+        marginVertical: vh(1)
     },
     userMessageBox:{
         flexDirection: 'row',
         alignSelf:'flex-end',
         alignItems: 'flex-end',
+        marginHorizontal: vh(1.7991),
+        marginVertical: vh(1)
+    },
+    time:{
+        fontSize: vh(1.4992),
+        marginHorizontal: vh(1.649),
     }
 
 });
