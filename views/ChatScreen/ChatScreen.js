@@ -80,7 +80,7 @@ export default class ChatScreen extends React.Component {
                 [
                   {text: 'OK',
                   onPress: () => {
-                    this.props.navigation.navigate('TypeScreen')
+                    this.props.navigation.pop(3)
                     this.componentWillUnmount()
                   }},
                 ],
