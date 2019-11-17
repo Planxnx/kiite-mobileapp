@@ -2,9 +2,13 @@ import {createAppContainer , createSwitchNavigator } from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 
 import SettingScreen from '../views/SettingScreen/SettingScreen'
+import AboutScreen from '../views/AboutusScreen/AboutScreen'
+import PrivacyScreen from '../views/PrivacyScreen/PrivacyScreen'
 
 const TimelineStack = createStackNavigator({
-    Setting: SettingScreen
+    Setting: SettingScreen,
+    Aboutus: AboutScreen,
+    PrivacyPolicy: PrivacyScreen
   },
   {
     initialRouteName: 'Setting',
