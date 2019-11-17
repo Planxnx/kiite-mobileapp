@@ -180,13 +180,21 @@ export default class LoginScreen extends React.Component {
                 </TouchableOpacity>
              </View>
              <View style={styles.footer} >
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={()=>{
+                        this.props.navigation.navigate('PrivacyPolicy');
+                    }}
+                >
                     <Text style={styles.createText}>
-                            Privacy&Policy
+                        Privacy Policy
                     </Text>
                 </TouchableOpacity>
                 <Text>&nbsp;|&nbsp;</Text>
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={()=>{
+                        this.props.navigation.navigate('Aboutus');
+                    }}
+                >
                     <Text style={styles.createText}>
                             About us
                     </Text>
