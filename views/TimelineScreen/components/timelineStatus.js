@@ -31,12 +31,15 @@ export default class TimelineStatus extends Component  {
     getTime = (time) =>{
         let todayDate = new Date(),
             createDate = new Date(time)
-        let compare = todayDate-createDate
-        if (compare > 60e3){
-            return `${Math.floor(compare / 60e3)} minutes ago`
+        let compare = (todayDate.getTime()/1000)-(createDate.getTime()/1000)
+        compare = Math.abs(compare)
+        if (compare < 60){
+            return `${Math.floor(compare)} seconds ago`
         }
-        else {
-            return `${Math.floor(compare / 1e3)} seconds ago`
+        else if(compare < 3600) {
+            return `${Math.floor(compare / 60)} minutes ago`
+        }else {
+            return `${Math.floor(compare / 3600)} hours ago`
         }
     }
 
@@ -57,9 +60,11 @@ export default class TimelineStatus extends Component  {
                     />
                     <Text style={styles.text}>{this.props.text}</Text>
                 </View>
-                <Text>
-                    {compareTime}
-                </Text>
+                <View style={styles.timeBox}>
+                    <Text style={{fontSize:vh(1.29)}}>
+                        {compareTime}
+                    </Text>
+                </View>
                 <View style={styles.bottomLine} />
             </View>
         )
@@ -87,10 +92,14 @@ const styles = StyleSheet.create({
         backgroundColor:"#BFBFBF"
     },
     bottomLine:{
-        marginTop:vh(2.998),
+        marginTop:vh(2.1),
         alignSelf:"center",
         width: vw(90.4266),
         height: vh(0.14995),
         backgroundColor:"#BFBFBF"
+    },
+    timeBox:{
+        alignSelf:"flex-end",
+        paddingHorizontal: vw(6),
     }
 });
