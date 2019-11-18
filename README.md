@@ -22,6 +22,10 @@
 - Sentiment analysis
 
 ## Getting started
+#### Required
+- <a href="https://github.com/Planxnx/kiite-webservice">
+  Kiite-Webserive
+</a>
 First, install React Native, Expo cli and other node modules.
 ```bash
 $ npm install -g expo-cli
