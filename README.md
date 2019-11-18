@@ -27,8 +27,12 @@
   Kiite-Webserive
 </a>
 First, install React Native, Expo cli and other node modules.
+
 ```bash
 $ npm install -g expo-cli
+```
+
+```bash
 $ npm install
 ```
 
