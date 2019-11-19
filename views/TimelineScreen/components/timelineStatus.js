@@ -15,8 +15,8 @@ export default class TimelineStatus extends Component  {
         switch (iconType) {
             case "tiger":
                 return require('../assets/tiger.png')
-            case "elephant":
-                return require('../assets/elephant.png')
+            case "pig":
+                return require('../assets/pig.png')
             case "cat":
                 return require('../assets/cat.png')
             case "dog":
