@@ -32,7 +32,7 @@ export default class CreateStatusScreen extends React.Component {
             isLoading: true
         });
 
-        fetch('https://cloudarch-ite.appspot.com/timeline', {
+        fetch('https://kiite-application.appspot.com/timeline', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

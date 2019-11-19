@@ -40,7 +40,7 @@ export default class LoginScreen extends React.Component {
             return
         }
 
-        fetch('https://cloudarch-ite.appspot.com/auth/login', {
+        fetch('https://kiite-application.appspot.com/auth/login', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

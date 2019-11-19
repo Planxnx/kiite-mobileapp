@@ -35,7 +35,7 @@ export default class TimelineScreen extends React.Component {
     })
 
     componentDidMount() {
-        this.socket = io('https://cloudarch-ite.appspot.com');
+        this.socket = io('https://kiite-application.appspot.com');
         AsyncStorage.multiGet(['username','token','role']).then((data) => {
           this.setState({
             username:data[0][1],
@@ -56,7 +56,7 @@ export default class TimelineScreen extends React.Component {
         this.setState({
             isLoading: true
         });
-        fetch('https://cloudarch-ite.appspot.com/timeline', {
+        fetch('https://kiite-application.appspot.com/timeline', {
             method: 'GET',
             headers: {
                 Accept: 'application/json',

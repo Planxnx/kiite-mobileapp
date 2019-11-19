@@ -24,7 +24,7 @@ export default class FindScreen extends React.Component {
     }
 
     componentDidMount() {
-        this.socket = io('https://cloudarch-ite.appspot.com');
+        this.socket = io('https://kiite-application.appspot.com');
         const { navigation } = this.props
         let userData = navigation.getParam('userData', 'null')
         this.setState({
