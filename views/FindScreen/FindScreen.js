@@ -73,8 +73,8 @@ export default class FindScreen extends React.Component {
                             socket: this.socket,
                             chatData: data
                         });
-                    }, 3500)
-                }, 1200)
+                    }, 4000)
+                }, 1500)
             }, 1500)
         });
         //เปลี่ยนจาก setTimeout เป็ร socket"foundChat"
