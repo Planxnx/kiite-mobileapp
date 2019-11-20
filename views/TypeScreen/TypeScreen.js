@@ -20,7 +20,7 @@ export default class SettingScreen extends React.Component {
     }
 
     componentDidMount = () => {
-        this.socket = io('https://cloudarch-ite.appspot.com');
+        this.socket = io('https://kiite-application.appspot.com');
         this.socket.on('queue_chat', (data)=>{
             this.setState({
                 queueData : data

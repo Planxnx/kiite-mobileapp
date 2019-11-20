@@ -132,7 +132,7 @@ export default class CreateScreen extends React.Component {
             return
         }
 
-        fetch('https://cloudarch-ite.appspot.com/auth/register', {
+        fetch('https://kiite-application.appspot.com/auth/register', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
