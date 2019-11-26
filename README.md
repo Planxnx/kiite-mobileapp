@@ -24,7 +24,7 @@
 ## Getting started
 #### Required
 - <a href="https://github.com/Planxnx/kiite-webservice">
-  Kiite-Webserive
+  Kiite-Webservice
 </a>
 First, install React Native, Expo cli and other node modules.
 
