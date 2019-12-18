@@ -162,7 +162,7 @@ export default class ChatScreen extends React.Component {
                                 multiline={true}
                                 onChangeText={messageInput => {
                                     this.setState({ 
-                                        messageInput:messageInput.trim(),
+                                        messageInput:messageInput,
                                         messageEmpty: this.textEmpty(messageInput.trim())
                                     });
                                 }}
