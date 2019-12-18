@@ -4,7 +4,6 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import OverallMood from  '../../components/OverallMood'
 import MessageBox from  './components/Messsage'
-
 export default class ChatScreen extends React.Component {
 
     static navigationOptions = ({navigation}) => {
@@ -30,7 +29,7 @@ export default class ChatScreen extends React.Component {
         this.state = {
             disconnected: false,
             message:[],
-            messageEmpty:true
+            messageEmpty:true,
         }
     }
 
