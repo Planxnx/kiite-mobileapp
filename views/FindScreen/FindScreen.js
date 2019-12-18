@@ -70,6 +70,7 @@ export default class FindScreen extends React.Component {
                     })
                     setTimeout(()=>{
                         data.topic = this.state.topic
+                        data.matchName = this.getThaiName(data.matchName)
                         this.props.navigation.navigate('ChatScreen', {
                             socket: this.socket,
                             chatData: data
@@ -83,6 +84,23 @@ export default class FindScreen extends React.Component {
 
     componentWillUnmount = () => {
         this.socket.disconnect()
+    }
+
+    getThaiName = (iconType) => {
+        switch (iconType) {
+            case "tiger":
+                return "คุณเสือ"
+            case "pig":
+                return "คุณหมู"
+            case "cat":
+                return "คุณแมว"
+            case "dog":
+                return "คุณหมา"
+            case "penguin":
+                return "คุณเพนกวิ้น"
+            default:
+                return "คุณอะไรของมึงวะ"
+        }
     }
 
     getFindingComp = () => {
