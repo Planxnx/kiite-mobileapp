@@ -2,6 +2,7 @@ import React from 'react';
 import { ActivityIndicator,AsyncStorage, StyleSheet, Text, View ,Button ,Image,TouchableHighlight ,TouchableOpacity ,Alert } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
+const config = require('../../config.json')
 
 export default class LoginScreen extends React.Component {
     constructor() {
@@ -40,7 +41,7 @@ export default class LoginScreen extends React.Component {
             return
         }
 
-        fetch('https://kiite-application.appspot.com/auth/login', {
+        fetch(`${config.kiiteApi}/auth/login`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

@@ -4,6 +4,7 @@ import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import TimelineStatus from  './components/timelineStatus'
 import OverallMood from  '../../components/OverallMood'
 import io from 'socket.io-client';
+const config = require('../../config.json')
 
 export default class TimelineScreen extends React.Component {
     constructor(props) {
@@ -35,7 +36,7 @@ export default class TimelineScreen extends React.Component {
     })
 
     componentDidMount() {
-        this.socket = io('https://kiite-application.appspot.com');
+        this.socket = io(config.kiiteApi);
         AsyncStorage.multiGet(['username','token','role']).then((data) => {
           this.setState({
             username:data[0][1],
@@ -56,7 +57,7 @@ export default class TimelineScreen extends React.Component {
         this.setState({
             isLoading: true
         });
-        fetch('https://kiite-application.appspot.com/timeline', {
+        fetch(`${config.kiiteApi}/timeline`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',

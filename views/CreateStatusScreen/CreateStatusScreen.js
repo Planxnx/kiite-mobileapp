@@ -2,7 +2,7 @@ import React from 'react';
 import { ActivityIndicator,AsyncStorage,StyleSheet, Text, View ,Alert  ,TouchableOpacity,Image } from 'react-native';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import { TextInput } from 'react-native-gesture-handler';
-
+const config = require('../../config.json')
 export default class CreateStatusScreen extends React.Component {
     constructor() {
         super();
@@ -32,7 +32,7 @@ export default class CreateStatusScreen extends React.Component {
             isLoading: true
         });
 
-        fetch('https://kiite-application.appspot.com/timeline', {
+        fetch(`${config.kiiteApi}/timeline`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -109,7 +109,6 @@ export default class CreateStatusScreen extends React.Component {
                     <TextInput 
                         style={styles.textInput}
                         placeholder="What’s happening?"
-                        returnKeyType='none'
                         multiline={true}
                         maxLength = {250}
                         keyboardType='email-address'
@@ -149,7 +148,7 @@ const styles = StyleSheet.create({
         padding:vh(2.248875),
         minHeight:vw(26.666),
         maxHeight:vh(40),
-        width:vh(47.676),
+        width:vh(47),
         // width:vw(84),
         marginVertical: vh(1.199),
         borderRadius: vh(0.899),

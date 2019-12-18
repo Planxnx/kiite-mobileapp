@@ -3,6 +3,7 @@ import { ActivityIndicator,AsyncStorage, StyleSheet, Text, View ,KeyboardAvoidin
 import { TextInput } from 'react-native-gesture-handler';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import { CheckBox } from 'react-native-elements'
+const config = require('../../config.json')
 
 export default class CreateScreen extends React.Component {
     constructor() {
@@ -131,8 +132,8 @@ export default class CreateScreen extends React.Component {
             )
             return
         }
-
-        fetch('https://kiite-application.appspot.com/auth/register', {
+        
+        fetch(`${config.kiiteApi}/auth/register`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

@@ -34,16 +34,16 @@ export default class OverallMood extends Component  {
             negPercent = 1
         }
         if (posPercent == 0 && negPercent == 0){
-            posLen = (50/100)*vh(50.97451)
+            posLen = (50/100)*vw(90.66)
             negLen = posLen
         }else {
-            posLen = (posPercent/100)*vh(50.97451)
-            negLen = (negPercent/100)*vh(50.97451)
+            posLen = (posPercent/100)*vw(90.66)
+            negLen = (negPercent/100)*vw(90.66)
         }
         
         return (
             <View style={styles.container}>
-                <View style={{width:vh(50.97),alignItems:'flex-start'}}>
+                <View style={{width:vw(90.66),alignItems:'flex-start'}}>
                     <Text style={{color:"#f8f8f8f8",fontSize: vh(1.799)}}>
                         currently mood
                     </Text>

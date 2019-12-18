@@ -3,7 +3,7 @@ import {
     AsyncStorage,
   Dimensions ,
   Text,
-  Image,
+  SafeAreaView,
   StyleSheet,
   View,
 } from 'react-native';
@@ -62,9 +62,9 @@ export default class Messages extends Component  {
     }
     render() {
         return (
-            <View style={styles.container}>
+            <SafeAreaView style={styles.container}>
                  {this.getComponent()}
-            </View>
+            </SafeAreaView>
         )
     }
 }     
