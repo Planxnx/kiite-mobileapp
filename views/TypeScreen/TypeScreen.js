@@ -2,6 +2,7 @@ import React from 'react';
 import { AsyncStorage,StyleSheet, Text, View ,Image,TouchableOpacity } from 'react-native';
 import { vh,vw } from 'react-native-expo-viewport-units';
 import io from 'socket.io-client';
+const config = require('../../config.json')
 
 export default class SettingScreen extends React.Component {
 
@@ -20,7 +21,7 @@ export default class SettingScreen extends React.Component {
     }
 
     componentDidMount = () => {
-        this.socket = io('https://kiite-application.appspot.com');
+        this.socket = io(config.kiiteApi);
         this.socket.on('queue_chat', (data)=>{
             this.setState({
                 queueData : data

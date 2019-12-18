@@ -4,6 +4,7 @@ import io from 'socket.io-client';
 import FindingComponent from  './components/FindComp'
 import ShowStatComponent from  './components/ShowStat'
 import { vh } from 'react-native-expo-viewport-units';
+const config = require('../../config.json')
 
 export default class FindScreen extends React.Component {
 
@@ -24,7 +25,7 @@ export default class FindScreen extends React.Component {
     }
 
     componentDidMount() {
-        this.socket = io('https://kiite-application.appspot.com');
+        this.socket = io(config.kiiteApi);
         const { navigation } = this.props
         let userData = navigation.getParam('userData', 'null')
         this.setState({

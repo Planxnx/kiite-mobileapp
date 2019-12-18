@@ -2,7 +2,7 @@ import React from 'react';
 import { ActivityIndicator,AsyncStorage,StyleSheet, Text, View ,Alert  ,TouchableOpacity,Image } from 'react-native';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import { TextInput } from 'react-native-gesture-handler';
-
+const config = require('../../config.json')
 export default class CreateStatusScreen extends React.Component {
     constructor() {
         super();
@@ -32,7 +32,7 @@ export default class CreateStatusScreen extends React.Component {
             isLoading: true
         });
 
-        fetch('https://kiite-application.appspot.com/timeline', {
+        fetch(`${config.kiiteApi}/timeline`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
