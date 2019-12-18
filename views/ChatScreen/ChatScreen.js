@@ -17,7 +17,7 @@ export default class ChatScreen extends React.Component {
                   style={{marginLeft:10}}
                 >
                     <View style={{justifyContent:'center',flexDirection: 'row',alignItems: 'center'}}>
-                        <Icon name={Platform.OS === 'ios' ? 'ios-arrow-back' : 'md-arrow-round-back'} size={vh(4.2)} color="#f8f8f8" style={{marginLeft:vh(1.49)}} />
+                        <Icon name={Platform.OS === 'ios' ? 'ios-arrow-back' : 'ios-arrow-back'} size={vh(4.2)} color="#f8f8f8" style={{marginLeft:vh(1.49)}} />
                         <Text style={{fontSize:vh(2.3988),color:"#f8f8f8"}}> Exit </Text>
                     </View>
                 </TouchableWithoutFeedback >
@@ -140,13 +140,13 @@ export default class ChatScreen extends React.Component {
         let moodPercent = this.findOverallMoodPercent()
         return (
             <View style={styles.container}>
+                <OverallMood posPercent={moodPercent.posPercent} negPercent={moodPercent.negPercent} />
                 <KeyboardAvoidingView 
                     style={styles.keyboardAvoidContainer}  
                     behavior="padding"
-                    keyboardVerticalOffset={vh(8.6)} 
+                    keyboardVerticalOffset={vh(10.2)} 
                     enabled 
                 >
-                    <OverallMood posPercent={moodPercent.posPercent} negPercent={moodPercent.negPercent} />
                     <ScrollView
                         ref={ref => this.scrollView = ref}
                         onContentSizeChange={(contentWidth, contentHeight)=>{        
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#EDEDED',
-    alignItems: 'center',
+    // alignItems: 'center',
   },
   keyboardAvoidContainer: {
     flex: 1,
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   messageInput:{
       minHeight: vh(7),
       maxHeight:vh(40),
-      width: vh(56.221889),
+      width: vw(100),
       backgroundColor: '#2FC4B2',
       flexDirection: 'row',
       alignItems: 'center',
@@ -216,7 +216,7 @@ const styles = StyleSheet.create({
       paddingVertical: vh(1.2)
   },
   textInputBox:{
-    width: vh(46.5),
+    width: vw(75),
     backgroundColor: '#F8F8F8',
     alignItems: 'center',
     justifyContent: 'center',
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
     borderRadius:vh(0.89955),
   },
   textInput:{
-    width:vh(44),
+    width:vw(72),
     backgroundColor: '#F8F8F8',
     alignItems: 'center',
     justifyContent: 'center',
