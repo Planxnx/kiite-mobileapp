@@ -15,8 +15,24 @@ export default class SettingScreen extends React.Component {
                     style={{width:vh(10),height:vh(10)}}
                     source={require('./assets/icon.png')}
                 />
+                <Text style={{fontWeight: 'bold',fontSize:vh(3)}}>
+                        Kiite
+                </Text>
+                <Text style={{fontWeight: 'bold'}}>
+                    จัดทำโดย
+                </Text>
                 <Text>
-                    Kiite KUY
+                        - แคทลียา อเนกจินต์ {`\n`}
+                        - ฉัตรชัยพัฒน์ เดชธัญญนน {`\n`}
+                        - ธานี จรัสตระกูล {`\n`}
+                        - พงศกร ปานประเสริฐ {`\n`}
+                        - สิริกร เรืองสุวรรณ {`\n`}
+                </Text>
+                <Text style={{fontWeight: 'bold'}}>
+                    ติดต่อ
+                </Text>
+                <Text>
+                       60010465@kmitl.ac.th
                 </Text>
             </View>
         );
@@ -28,9 +44,5 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#EDEDED',
     alignItems:'center'
-  },
-  text:{
-      fontSize: vh(2.3988),
-      marginLeft:vh(1.799)
-  },
+  }
 });

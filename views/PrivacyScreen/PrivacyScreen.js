@@ -12,7 +12,7 @@ export default class SettingScreen extends React.Component {
         return (
             <View style={styles.container}>
                 <Text>
-                    Kiite KUY
+                    Kiite
                 </Text>
             </View>
         );
