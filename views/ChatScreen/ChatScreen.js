@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
       paddingVertical: vh(1.2)
   },
   textInputBox:{
-    width: vw(75),
+    width: vw(80),
     backgroundColor: '#F8F8F8',
     alignItems: 'center',
     justifyContent: 'center',
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     borderRadius:vh(0.89955),
   },
   textInput:{
-    width:vw(72),
+    width:vw(76),
     backgroundColor: '#F8F8F8',
     alignItems: 'center',
     justifyContent: 'center',
