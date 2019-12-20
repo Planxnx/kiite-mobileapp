@@ -20,6 +20,7 @@
 - Annonymous chatroom
 - Annonymous timeline
 - Sentiment analysis
+- Stickers!!!
 
 ## Getting started
 #### Required
