@@ -1,6 +1,7 @@
 import React from 'react';
 import { Alert,Platform,StyleSheet, Text, View ,ScrollView,TouchableWithoutFeedback ,KeyboardAvoidingView,TextInput,AsyncStorage,TouchableOpacity  } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
+import { Header } from 'react-navigation';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import OverallMood from  '../../components/OverallMood'
 import MessageBox from  './components/Messsage'
@@ -143,7 +144,7 @@ export default class ChatScreen extends React.Component {
                 <KeyboardAvoidingView 
                     style={styles.keyboardAvoidContainer}  
                     behavior="padding"
-                    keyboardVerticalOffset={vh(10.2)} 
+                    keyboardVerticalOffset={Platform.select({ios: vh(10.2), android: vh(12)})} 
                     enabled 
                 >
                     <ScrollView
