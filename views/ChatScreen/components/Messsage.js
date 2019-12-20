@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import {
     AsyncStorage,
-  Dimensions ,
+  Image ,
   Text,
   SafeAreaView,
   StyleSheet,
@@ -20,30 +20,36 @@ export default class Messages extends Component  {
     componentDidMount() {
     }
 
+    getSticker = (src) =>{
+        return(
+            <Image
+                style={{
+                    width: vw(25),
+                    height: vw(25),
+                    marginVertical: vw(3),
+                    marginHorizontal: vw(3)
+                    }}
+                source={{uri:src}}
+            />
+        )
+    }
+
     getUserMessage = (time) => {
-        const { text } = this.props;
+        const { text,type,src } = this.props;
         return (
             <View style={styles.userMessageBox}>
                 <Text style={styles.time}>
                     {time}
                 </Text>
-                <View style={styles.userMessage} >
-                    <Text>
-                        {text}
-                    </Text>
-                </View>
+                {type != 'sticker' ? <View style={styles.userMessage} ><Text> {text} </Text></View> : this.getSticker(src) }
             </View>
         )
     }
     getMatcherMessage = (time) => {
-        const { text } = this.props;
+        const { text,type,src } = this.props;
         return (
             <View style={styles.matcherMessageBox}>
-                <View style={styles.matcherMessage} >
-                    <Text>
-                        {text}
-                    </Text>
-                </View>
+                {type != 'sticker' ? <View style={styles.userMessage} ><Text> {text} </Text></View> : this.getSticker(src) }
                 <Text style={styles.time}>
                     {time}
                 </Text>
