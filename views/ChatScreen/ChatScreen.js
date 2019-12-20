@@ -1,10 +1,12 @@
 import React from 'react';
-import { Alert,Platform,StyleSheet, Text, View ,ScrollView,TouchableWithoutFeedback ,KeyboardAvoidingView,TextInput,AsyncStorage,TouchableOpacity  } from 'react-native';
+import { Alert,Platform,StyleSheet, Text,Keyboard, View ,ScrollView,TouchableWithoutFeedback ,KeyboardAvoidingView,TextInput,AsyncStorage,TouchableOpacity,Image  } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { Header } from 'react-navigation';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import OverallMood from  '../../components/OverallMood'
 import MessageBox from  './components/Messsage'
+import StickerBox from  './components/Sticker'
+
 export default class ChatScreen extends React.Component {
 
     static navigationOptions = ({navigation}) => {
@@ -31,6 +33,7 @@ export default class ChatScreen extends React.Component {
             disconnected: false,
             message:[],
             messageEmpty:true,
+            stickerBox: false
         }
     }
 
@@ -168,11 +171,39 @@ export default class ChatScreen extends React.Component {
                                 }}
                                 value={this.state.messageInput}
                             />
+                            <TouchableOpacity
+                                onPress={()=>{
+                                    // this.sendMessage()
+                                    switch (this.state.stickerBox) {
+                                        case true:
+                                            this.setState({ 
+                                                stickerBox: false
+                                            });
+                                            break;
+                                    
+                                        default:
+                                            Keyboard.dismiss()
+                                            this.setState({ 
+                                                stickerBox: true
+                                            });
+                                            break;
+                                    }
+                                }}
+                            >
+                                <Image
+                                    style={{
+                                        width: vw(6),
+                                        height: vw(6),
+                                        marginHorizontal: vw(1)
+                                    }}
+                                    source={this.state.stickerBox ? require('./assets/stickerOnclickIcon.png') : require('./assets/stickerIcon.png') }
+                                />
+                            </TouchableOpacity>
                         </View>
                         <TouchableOpacity
                             style={this.state.messageEmpty ? styles.buttonInputDisable : styles.buttonInput}
                             onPress={()=>{
-                                this.sendMessage(),
+                                this.sendMessage()
                                 this.setState({ 
                                     messageEmpty: true
                                 });
@@ -182,9 +213,12 @@ export default class ChatScreen extends React.Component {
                             <Text 
                                  style={this.state.messageEmpty ? {color: "#EFEFEF"} : {color: "#000000"}}
                             >
-                                Send
+                                Send!
                             </Text>
                         </TouchableOpacity>
+                    </View>
+                    <View>
+                        {this.state.stickerBox ? <StickerBox/> : <View></View>}
                     </View>
                 </KeyboardAvoidingView>
             </View>
@@ -218,6 +252,7 @@ const styles = StyleSheet.create({
   textInputBox:{
     width: vw(80),
     backgroundColor: '#F8F8F8',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     minHeight:vw(6.5),
@@ -225,7 +260,7 @@ const styles = StyleSheet.create({
     borderRadius:vh(0.89955),
   },
   textInput:{
-    width:vw(76),
+    width:vw(70),
     backgroundColor: '#F8F8F8',
     alignItems: 'center',
     justifyContent: 'center',
