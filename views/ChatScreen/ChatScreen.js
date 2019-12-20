@@ -116,6 +116,23 @@ export default class ChatScreen extends React.Component {
 
     }
 
+    stickerSwitch = () => {
+        switch (this.state.stickerBox) {
+            case true:
+                this.setState({ 
+                    stickerBox: false
+                });
+                break;
+        
+            default:
+                Keyboard.dismiss()
+                this.setState({ 
+                    stickerBox: true
+                });
+                break;
+        }
+    }
+
     componentWillUnmount = () => {
         this.socket.disconnect()
     }
@@ -147,7 +164,7 @@ export default class ChatScreen extends React.Component {
                 <KeyboardAvoidingView 
                     style={styles.keyboardAvoidContainer}  
                     behavior="padding"
-                    keyboardVerticalOffset={Platform.select({ios: vh(10.2), android: vh(12)})} 
+                    keyboardVerticalOffset={Platform.select({ios: vh(10), android: vh(12)})} 
                     enabled 
                 >
                     <ScrollView
@@ -162,6 +179,7 @@ export default class ChatScreen extends React.Component {
                         <View style={styles.textInputBox} >
                             <TextInput 
                                 style={styles.textInput}
+                                onTouchStart={()=>this.stickerSwitch()}
                                 multiline={true}
                                 onChangeText={messageInput => {
                                     this.setState({ 
@@ -173,21 +191,7 @@ export default class ChatScreen extends React.Component {
                             />
                             <TouchableOpacity
                                 onPress={()=>{
-                                    // this.sendMessage()
-                                    switch (this.state.stickerBox) {
-                                        case true:
-                                            this.setState({ 
-                                                stickerBox: false
-                                            });
-                                            break;
-                                    
-                                        default:
-                                            Keyboard.dismiss()
-                                            this.setState({ 
-                                                stickerBox: true
-                                            });
-                                            break;
-                                    }
+                                    this.stickerSwitch()
                                 }}
                             >
                                 <Image
