@@ -18,7 +18,6 @@ export default class Messages extends Component  {
     }
 
     componentDidMount() {
-        const { user,text } = this.props;
     }
 
     getUserMessage = (time) => {

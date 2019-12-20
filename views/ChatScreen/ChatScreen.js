@@ -1,12 +1,41 @@
 import React from 'react';
-import { Alert,Platform,StyleSheet, Text,Keyboard, View ,ScrollView,TouchableWithoutFeedback ,KeyboardAvoidingView,TextInput,AsyncStorage,TouchableOpacity,Image  } from 'react-native';
+import { Alert,Platform,StyleSheet, Text,Keyboard, View ,ScrollView,TouchableWithoutFeedback ,KeyboardAvoidingView,TextInput,AsyncStorage,TouchableOpacity,Image,SafeAreaView  } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { Header } from 'react-navigation';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import OverallMood from  '../../components/OverallMood'
 import MessageBox from  './components/Messsage'
-import StickerBox from  './components/Sticker'
-
+const stickerList = [
+    {
+        title: 'affection',
+        mood: 'pos',
+        src: require('./assets/stickers/pos/affection.png'),
+    },{
+        title: 'friendship',
+        mood: 'pos',
+        src: require('./assets/stickers/pos/friendship.png'),
+    },{
+        title: 'trustworthy',
+        mood: 'neg',
+        src: require('./assets/stickers/neg/trustworthy.png'),
+    },{
+        title: 'handshake',
+        mood: 'pos',
+        src: require('./assets/stickers/pos/handshake.png'),
+    },{
+        title: 'hug',
+        mood: 'pos',
+        src: require('./assets/stickers/pos/hug.png'),
+    },{
+        title: 'laugh',
+        mood: 'pos',
+        src: require('./assets/stickers/pos/laugh.png'),
+    },{
+        title: 'listener',
+        mood: 'pos',
+        src: require('./assets/stickers/pos/listener.png'),
+    },
+]
 export default class ChatScreen extends React.Component {
 
     static navigationOptions = ({navigation}) => {
@@ -33,7 +62,7 @@ export default class ChatScreen extends React.Component {
             disconnected: false,
             message:[],
             messageEmpty:true,
-            stickerBox: false
+            stickerBox: false,
         }
     }
 
@@ -60,6 +89,8 @@ export default class ChatScreen extends React.Component {
                 user: 'matcher',
                 text: data.text,
                 mood: data.mood,
+                type: data.type,
+                src: data.src,
                 time: time
             }
             this.setState({
@@ -111,7 +142,8 @@ export default class ChatScreen extends React.Component {
             username: this.state.username,
             topic: this.state.chatData.topic,
             room: this.state.chatData.room,
-            text: this.state.messageInput
+            text: this.state.messageInput,
+            type: 'text'
         });
 
     }
@@ -133,8 +165,35 @@ export default class ChatScreen extends React.Component {
         }
     }
 
-    componentWillUnmount = () => {
-        this.socket.disconnect()
+    stickersRow = () =>{
+        return stickerList.map((sticker,i)=>{
+            return(
+                    <TouchableOpacity
+                        onPress={()=>{}}
+                        key={i}
+                    >
+                        <Image
+                            style={{
+                                width: vw(25),
+                                height: vw(25),
+                                marginVertical: vw(5),
+                                marginHorizontal: vw(7)
+                            }}
+                            source={sticker.src}
+                        />
+                    </TouchableOpacity>
+                )
+            })
+    }
+
+    stickerBox = () => {
+        return (
+            <SafeAreaView>
+                <ScrollView horizontal={true}>
+                    {this.stickersRow()}
+                </ScrollView>
+            </SafeAreaView>
+        )
     }
 
     findOverallMoodPercent = () => {
@@ -152,6 +211,11 @@ export default class ChatScreen extends React.Component {
             negPercent: negCount/(posCount+negCount)*100
         }
     }
+
+    componentWillUnmount = () => {
+        this.socket.disconnect()
+    }
+
 
     render(){
         let MessageBoxes =  this.state.message.map((data,key)=>{
@@ -222,7 +286,7 @@ export default class ChatScreen extends React.Component {
                         </TouchableOpacity>
                     </View>
                     <View>
-                        {this.state.stickerBox ? <StickerBox/> : <View></View>}
+                        {this.state.stickerBox ? this.stickerBox() : <View></View>}
                     </View>
                 </KeyboardAvoidingView>
             </View>
