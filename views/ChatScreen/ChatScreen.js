@@ -1,42 +1,11 @@
 import React from 'react';
-import { Alert,Platform,StyleSheet, Text,Keyboard, View ,ScrollView,TouchableWithoutFeedback ,KeyboardAvoidingView,TextInput,AsyncStorage,TouchableOpacity,Image,SafeAreaView  } from 'react-native';
+import { Alert,Platform,StyleSheet, Text,Keyboard, View ,ScrollView,TouchableWithoutFeedback ,KeyboardAvoidingView,TextInput,AsyncStorage,TouchableOpacity,Image,SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { Header } from 'react-navigation';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import OverallMood from  '../../components/OverallMood'
 import MessageBox from  './components/Messsage'
-
-const stickerList = [
-    {
-        title: 'รักน้า',
-        mood: 'รักน้า',
-        src: 'https://www.img.in.th/images/17b2813d9be48bcb734bf0f72276f29e.png',
-    },{
-        title: 'มิตรภาพ',
-        mood: 'มิตรภาพ',
-        src: 'https://www.img.in.th/images/2cba499581319637c882dc648401bd3c.png',
-    },{
-        title: 'เงียบไปเลยย',
-        mood: 'เงียบไปเลยย',
-        src: 'http://img.in.th/images/f38645384b53bd328fcb917093b2d8d3.png',
-    },{
-        title: 'จับมือ',
-        mood: 'จับมือ',
-        src: 'https://www.img.in.th/images/a4eb9518ebf72e9fd2fff6429325dadc.png',
-    },{
-        title: 'กอดกันนะ',
-        mood: 'กอดกันนะ',
-        src: 'https://www.img.in.th/images/b11831fc07e45677096629846eda51a9.png',
-    },{
-        title: '5555',
-        mood: '5555',
-        src: 'https://www.img.in.th/images/61121fbfea2aebdd5d395bb732a89d1b.png',
-    },{
-        title: 'ฟังอยู่นะ',
-        mood: 'ฟังอยู่นะ',
-        src: 'http://img.in.th/images/c6af8757552b91c28657ee2ebdcdc1be.png',
-    }
-]
+const stickers = require('./stickersList')
 export default class ChatScreen extends React.Component {
 
     static navigationOptions = ({navigation}) => {
@@ -150,7 +119,7 @@ export default class ChatScreen extends React.Component {
 
     }
 
-    sendSticker = (mood,src) => {
+    sendSticker = (title,src) => {
         function checkTime(i) {
             return (i < 10) ? "0" + i : i;
         }
@@ -159,7 +128,7 @@ export default class ChatScreen extends React.Component {
         let messageData = {
             user: 'user',
             type: 'sticker',
-            text: mood,
+            text: title,
             time: time,
             src: src
         }
@@ -170,7 +139,7 @@ export default class ChatScreen extends React.Component {
             username: this.state.username,
             topic: this.state.chatData.topic,
             room: this.state.chatData.room,
-            text: mood,
+            text: title,
             src: src,
             type: 'sticker'
         });
@@ -194,32 +163,42 @@ export default class ChatScreen extends React.Component {
         }
     }
 
-    stickersRow = () =>{
-        return stickerList.map((sticker,i)=>{
+    stickersRow = (start,stop) =>{
+        return stickers.list.map((sticker,i)=>{
+            if(i>= start && i<stop){
             return(
                     <TouchableOpacity
-                        onPress={()=>{this.sendSticker(sticker.mood,sticker.src)}}
+                        onPress={()=>{this.sendSticker(sticker.title,sticker.src)}}
                         key={i}
                     >
                         <Image
                             style={{
-                                width: vw(25),
-                                height: vw(25),
+                                width: vw(18),
+                                height: vw(18),
                                 marginVertical: vw(5),
-                                marginHorizontal: vw(7)
+                                marginHorizontal: vw(5)
                             }}
                             source={{uri:sticker.src}}
                         />
                     </TouchableOpacity>
                 )
-            })
+            }
+        })
+            
     }
 
     stickerBox = () => {
         return (
             <SafeAreaView>
                 <ScrollView horizontal={true}>
-                    {this.stickersRow()}
+                    <View>
+                        <View style={{flexDirection:'row'}}>
+                            {this.stickersRow(0,stickers.list.length/2)}
+                        </View>
+                        <View style={{flexDirection:'row'}}>
+                            {this.stickersRow(stickers.list.length/2,stickers.list.length)}
+                        </View>
+                    </View>
                 </ScrollView>
             </SafeAreaView>
         )
@@ -259,7 +238,7 @@ export default class ChatScreen extends React.Component {
                     behavior="padding"
                     keyboardVerticalOffset={Platform.select({ios: vh(10), android: vh(12)})} 
                     enabled 
-                >
+                >   
                     <ScrollView
                         ref={ref => this.scrollView = ref}
                         onContentSizeChange={(contentWidth, contentHeight)=>{        
@@ -272,7 +251,9 @@ export default class ChatScreen extends React.Component {
                         <View style={styles.textInputBox} >
                             <TextInput 
                                 style={styles.textInput}
-                                onTouchStart={()=>this.stickerSwitch()}
+                                onTouchStart={()=>this.setState({ 
+                                    stickerBox: false
+                                })}
                                 multiline={true}
                                 onChangeText={messageInput => {
                                     this.setState({ 
