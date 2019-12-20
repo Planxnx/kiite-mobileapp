@@ -5,36 +5,37 @@ import { Header } from 'react-navigation';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import OverallMood from  '../../components/OverallMood'
 import MessageBox from  './components/Messsage'
+
 const stickerList = [
     {
-        title: 'affection',
-        mood: 'pos',
-        src: require('./assets/stickers/pos/affection.png'),
+        title: 'รักน้า',
+        mood: 'รักน้า',
+        src: 'https://www.img.in.th/images/17b2813d9be48bcb734bf0f72276f29e.png',
     },{
-        title: 'friendship',
-        mood: 'pos',
-        src: require('./assets/stickers/pos/friendship.png'),
+        title: 'มิตรภาพ',
+        mood: 'มิตรภาพ',
+        src: 'https://www.img.in.th/images/2cba499581319637c882dc648401bd3c.png',
     },{
-        title: 'trustworthy',
-        mood: 'neg',
-        src: require('./assets/stickers/neg/trustworthy.png'),
+        title: 'เงียบไปเลยย',
+        mood: 'เงียบไปเลยย',
+        src: 'http://img.in.th/images/f38645384b53bd328fcb917093b2d8d3.png',
     },{
-        title: 'handshake',
-        mood: 'pos',
-        src: require('./assets/stickers/pos/handshake.png'),
+        title: 'จับมือ',
+        mood: 'จับมือ',
+        src: 'https://www.img.in.th/images/a4eb9518ebf72e9fd2fff6429325dadc.png',
     },{
-        title: 'hug',
-        mood: 'pos',
-        src: require('./assets/stickers/pos/hug.png'),
+        title: 'กอดกันนะ',
+        mood: 'กอดกันนะ',
+        src: 'https://www.img.in.th/images/b11831fc07e45677096629846eda51a9.png',
     },{
-        title: 'laugh',
-        mood: 'pos',
-        src: require('./assets/stickers/pos/laugh.png'),
+        title: '5555',
+        mood: '5555',
+        src: 'https://www.img.in.th/images/61121fbfea2aebdd5d395bb732a89d1b.png',
     },{
-        title: 'listener',
-        mood: 'pos',
-        src: require('./assets/stickers/pos/listener.png'),
-    },
+        title: 'ฟังอยู่นะ',
+        mood: 'ฟังอยู่นะ',
+        src: 'http://img.in.th/images/c6af8757552b91c28657ee2ebdcdc1be.png',
+    }
 ]
 export default class ChatScreen extends React.Component {
 
@@ -132,7 +133,8 @@ export default class ChatScreen extends React.Component {
         let messageData = {
             user: 'user',
             text: this.state.messageInput,
-            time: time
+            time: time,
+            type: 'text'
         }
         this.setState({ 
             message: [...this.state.message, messageData],
@@ -144,6 +146,33 @@ export default class ChatScreen extends React.Component {
             room: this.state.chatData.room,
             text: this.state.messageInput,
             type: 'text'
+        });
+
+    }
+
+    sendSticker = (mood,src) => {
+        function checkTime(i) {
+            return (i < 10) ? "0" + i : i;
+        }
+        let today = new Date() 
+        let time = checkTime(today.getHours()) + ":" + checkTime(today.getMinutes())
+        let messageData = {
+            user: 'user',
+            type: 'sticker',
+            text: mood,
+            time: time,
+            src: src
+        }
+        this.setState({ 
+            message: [...this.state.message, messageData],
+        })
+        this.socket.emit('send_chat', {
+            username: this.state.username,
+            topic: this.state.chatData.topic,
+            room: this.state.chatData.room,
+            text: mood,
+            src: src,
+            type: 'sticker'
         });
 
     }
@@ -169,7 +198,7 @@ export default class ChatScreen extends React.Component {
         return stickerList.map((sticker,i)=>{
             return(
                     <TouchableOpacity
-                        onPress={()=>{}}
+                        onPress={()=>{this.sendSticker(sticker.mood,sticker.src)}}
                         key={i}
                     >
                         <Image
@@ -179,7 +208,7 @@ export default class ChatScreen extends React.Component {
                                 marginVertical: vw(5),
                                 marginHorizontal: vw(7)
                             }}
-                            source={sticker.src}
+                            source={{uri:sticker.src}}
                         />
                     </TouchableOpacity>
                 )
@@ -219,7 +248,7 @@ export default class ChatScreen extends React.Component {
 
     render(){
         let MessageBoxes =  this.state.message.map((data,key)=>{
-            return <MessageBox key={key} user = {data.user} text={data.text} time={data.time}  />
+            return <MessageBox key={key} user = {data.user} text={data.text} time={data.time} type={data.type} src={data.src} />
         })
         let moodPercent = this.findOverallMoodPercent()
         return (
