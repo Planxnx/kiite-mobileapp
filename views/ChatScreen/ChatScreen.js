@@ -1,10 +1,11 @@
 import React from 'react';
-import { Alert,Platform,StyleSheet, Text, View ,ScrollView,TouchableWithoutFeedback ,KeyboardAvoidingView,TextInput,AsyncStorage,TouchableOpacity  } from 'react-native';
+import { Alert,Platform,StyleSheet, Text,Keyboard, View ,ScrollView,TouchableWithoutFeedback ,KeyboardAvoidingView,TextInput,AsyncStorage,TouchableOpacity,Image,SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { Header } from 'react-navigation';
 import { vw, vh, vmin, vmax } from 'react-native-expo-viewport-units';
 import OverallMood from  '../../components/OverallMood'
 import MessageBox from  './components/Messsage'
+const stickers = require('./stickersList')
 export default class ChatScreen extends React.Component {
 
     static navigationOptions = ({navigation}) => {
@@ -31,6 +32,7 @@ export default class ChatScreen extends React.Component {
             disconnected: false,
             message:[],
             messageEmpty:true,
+            stickerBox: false,
         }
     }
 
@@ -57,6 +59,8 @@ export default class ChatScreen extends React.Component {
                 user: 'matcher',
                 text: data.text,
                 mood: data.mood,
+                type: data.type,
+                src: data.src,
                 time: time
             }
             this.setState({
@@ -98,7 +102,8 @@ export default class ChatScreen extends React.Component {
         let messageData = {
             user: 'user',
             text: this.state.messageInput,
-            time: time
+            time: time,
+            type: 'text'
         }
         this.setState({ 
             message: [...this.state.message, messageData],
@@ -108,13 +113,95 @@ export default class ChatScreen extends React.Component {
             username: this.state.username,
             topic: this.state.chatData.topic,
             room: this.state.chatData.room,
-            text: this.state.messageInput
+            text: this.state.messageInput,
+            type: 'text'
         });
 
     }
 
-    componentWillUnmount = () => {
-        this.socket.disconnect()
+    sendSticker = (title,src) => {
+        function checkTime(i) {
+            return (i < 10) ? "0" + i : i;
+        }
+        let today = new Date() 
+        let time = checkTime(today.getHours()) + ":" + checkTime(today.getMinutes())
+        let messageData = {
+            user: 'user',
+            type: 'sticker',
+            text: title,
+            time: time,
+            src: src
+        }
+        this.setState({ 
+            message: [...this.state.message, messageData],
+        })
+        this.socket.emit('send_chat', {
+            username: this.state.username,
+            topic: this.state.chatData.topic,
+            room: this.state.chatData.room,
+            text: title,
+            src: src,
+            type: 'sticker'
+        });
+
+    }
+
+    stickerSwitch = () => {
+        switch (this.state.stickerBox) {
+            case true:
+                this.setState({ 
+                    stickerBox: false
+                });
+                break;
+        
+            default:
+                Keyboard.dismiss()
+                this.setState({ 
+                    stickerBox: true
+                });
+                break;
+        }
+    }
+
+    stickersRow = (start,stop) =>{
+        return stickers.list.map((sticker,i)=>{
+            if(i>= start && i<stop){
+            return(
+                    <TouchableOpacity
+                        onPress={()=>{this.sendSticker(sticker.title,sticker.src)}}
+                        key={i}
+                    >
+                        <Image
+                            style={{
+                                width: vw(18),
+                                height: vw(18),
+                                marginVertical: vw(5),
+                                marginHorizontal: vw(5)
+                            }}
+                            source={{uri:sticker.src}}
+                        />
+                    </TouchableOpacity>
+                )
+            }
+        })
+            
+    }
+
+    stickerBox = () => {
+        return (
+            <SafeAreaView>
+                <ScrollView horizontal={true}>
+                    <View>
+                        <View style={{flexDirection:'row'}}>
+                            {this.stickersRow(0,stickers.list.length/2)}
+                        </View>
+                        <View style={{flexDirection:'row'}}>
+                            {this.stickersRow(stickers.list.length/2,stickers.list.length)}
+                        </View>
+                    </View>
+                </ScrollView>
+            </SafeAreaView>
+        )
     }
 
     findOverallMoodPercent = () => {
@@ -133,9 +220,14 @@ export default class ChatScreen extends React.Component {
         }
     }
 
+    componentWillUnmount = () => {
+        this.socket.disconnect()
+    }
+
+
     render(){
         let MessageBoxes =  this.state.message.map((data,key)=>{
-            return <MessageBox key={key} user = {data.user} text={data.text} time={data.time}  />
+            return <MessageBox key={key} user = {data.user} text={data.text} time={data.time} type={data.type} src={data.src} />
         })
         let moodPercent = this.findOverallMoodPercent()
         return (
@@ -144,9 +236,9 @@ export default class ChatScreen extends React.Component {
                 <KeyboardAvoidingView 
                     style={styles.keyboardAvoidContainer}  
                     behavior="padding"
-                    keyboardVerticalOffset={Platform.select({ios: vh(10.2), android: vh(12)})} 
+                    keyboardVerticalOffset={Platform.select({ios: vh(10), android: vh(12)})} 
                     enabled 
-                >
+                >   
                     <ScrollView
                         ref={ref => this.scrollView = ref}
                         onContentSizeChange={(contentWidth, contentHeight)=>{        
@@ -159,6 +251,9 @@ export default class ChatScreen extends React.Component {
                         <View style={styles.textInputBox} >
                             <TextInput 
                                 style={styles.textInput}
+                                onTouchStart={()=>this.setState({ 
+                                    stickerBox: false
+                                })}
                                 multiline={true}
                                 onChangeText={messageInput => {
                                     this.setState({ 
@@ -168,11 +263,25 @@ export default class ChatScreen extends React.Component {
                                 }}
                                 value={this.state.messageInput}
                             />
+                            <TouchableOpacity
+                                onPress={()=>{
+                                    this.stickerSwitch()
+                                }}
+                            >
+                                <Image
+                                    style={{
+                                        width: vw(6),
+                                        height: vw(6),
+                                        marginHorizontal: vw(1)
+                                    }}
+                                    source={this.state.stickerBox ? require('./assets/stickerOnclickIcon.png') : require('./assets/stickerIcon.png') }
+                                />
+                            </TouchableOpacity>
                         </View>
                         <TouchableOpacity
                             style={this.state.messageEmpty ? styles.buttonInputDisable : styles.buttonInput}
                             onPress={()=>{
-                                this.sendMessage(),
+                                this.sendMessage()
                                 this.setState({ 
                                     messageEmpty: true
                                 });
@@ -182,9 +291,12 @@ export default class ChatScreen extends React.Component {
                             <Text 
                                  style={this.state.messageEmpty ? {color: "#EFEFEF"} : {color: "#000000"}}
                             >
-                                Send
+                                Send!
                             </Text>
                         </TouchableOpacity>
+                    </View>
+                    <View>
+                        {this.state.stickerBox ? this.stickerBox() : <View></View>}
                     </View>
                 </KeyboardAvoidingView>
             </View>
@@ -218,6 +330,7 @@ const styles = StyleSheet.create({
   textInputBox:{
     width: vw(80),
     backgroundColor: '#F8F8F8',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     minHeight:vw(6.5),
@@ -225,7 +338,7 @@ const styles = StyleSheet.create({
     borderRadius:vh(0.89955),
   },
   textInput:{
-    width:vw(76),
+    width:vw(70),
     backgroundColor: '#F8F8F8',
     alignItems: 'center',
     justifyContent: 'center',
