@@ -10,8 +10,12 @@ export default class LoginScreen extends React.Component {
         this.state = {
             usernameInput: "",
             passwordInput: "",
-            isLoading: false,
+            isLoading: true,
         };
+    }
+
+    componentDidMount() {
+        this.checkApiHealth()
     }
 
     static navigationOptions = {
@@ -20,6 +24,47 @@ export default class LoginScreen extends React.Component {
 
     gotoMain = () => {
         this.props.navigation.navigate('Main')
+    }
+
+    checkApiHealth = () => {
+        fetch(`${config.kiiteApi}/health`, {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response=>response.json())
+        .then(responseJson => {
+            if(responseJson.status != 200){
+                Alert.alert(
+                    'Connection problems',
+                    "Something went wrong. Internet Connection problems . Please try again",
+                    [
+                      {text: 'OK'},
+                    ],
+                    {cancelable: false},
+                )
+                return
+            }
+            this.setState({
+                isLoading: false,
+            })
+        })
+        .catch(error=>{
+            this.setState({
+                isLoading: false,
+            })
+            Alert.alert(
+                'Connection problems',
+                "Something went wrong or Internet Connection problems . Please try again",
+                [
+                  {text: 'OK'},
+                ],
+                {cancelable: false},
+            ) 
+            return
+        }) 
     }
 
     signIn = async () => {
