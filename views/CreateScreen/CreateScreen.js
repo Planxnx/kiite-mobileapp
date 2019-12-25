@@ -189,7 +189,17 @@ export default class CreateScreen extends React.Component {
                 return
             }
         }).catch(error=>{
-            console.error(error) 
+            this.setState({
+                isLoading: false,
+            });
+            Alert.alert(
+                'Create Account failed',
+                "Something went wrong or Internet Connection problems . Please try again",
+                [
+                  {text: 'OK'},
+                ],
+                {cancelable: false},
+            )
             return
         })   
     }

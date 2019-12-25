@@ -71,14 +71,13 @@ export default class CreateStatusScreen extends React.Component {
                 isLoading: false,
             });
             Alert.alert(
-                'Create Status failed',
-                "Something went wrong. Please try again",
+                'Create Post failed',
+                "Something went wrong or Internet Connection problems . Please try again",
                 [
                   {text: 'OK'},
                 ],
                 {cancelable: false},
             )
-            console.error(error) 
             return
         })  
     };

@@ -83,7 +83,7 @@ export default class LoginScreen extends React.Component {
                 });
                 Alert.alert(
                     'Login failed',
-                    "Something went wrong. Please try again",
+                    "Something went wrong or Internet Connection problems . Please try again",
                     [
                       {text: 'OK'},
                     ],
@@ -92,13 +92,12 @@ export default class LoginScreen extends React.Component {
                 return
             }
         }).catch(error=>{
-            console.error(error)
             this.setState({
                 isLoading: false,
             });
             Alert.alert(
-                'Create Status failed',
-                "Something went wrong. Please try again",
+                'Login failed',
+                "Something went wrong or Internet Connection problems . Please try again",
                 [
                   {text: 'OK'},
                 ],
